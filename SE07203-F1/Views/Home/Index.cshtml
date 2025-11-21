@@ -1,0 +1,28 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+@model Account
+
+<div class="text-center">
+        @if (ViewBag.isConnectedDatabase)
+        {
+        <h1> Connected Database </h1>
+        }
+    <h1 class="display-4">Welcome 
+        @if(ViewBag.isLogin)
+        {
+            <span>User @Model.Fullname</span>
+            <span>Go to Task List, <a href="@Url.Action("Index", "MyTask")">Here</a>.</span>
+        }
+        else
+        {
+            @Model.Fullname
+            <p>Please <a href="@Url.Action("Index", "Login")">Login</a>.</p>
+            <p>If dont have account, <a href="@Url.Action("Index", "Register")">Register</a>.</p>
+        }
+    </h1>
+    
+    
+    <input type="text" name="username" value="" class="form-text form-control"/>
+</div>

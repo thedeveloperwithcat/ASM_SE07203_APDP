@@ -1,0 +1,36 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<h1>
+    Welcome to Login
+</h1>
+<div class="container-fluid">
+    <div class="row text-center">
+        <div class="col-4">
+        </div>
+        <div class="col-4">
+            <form asp-action="Login" asp-controller="Login" method="POST">
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" class="form-control" id="username" name="username">
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password" name="password">
+                </div>
+                <div class="mb-3">
+                    <button class="btn btn-success w-100">
+                        Submit
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="col-4">
+        </div>
+
+    </div>
+</div>
+
