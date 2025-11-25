@@ -339,3 +339,4 @@ D:\CODE\CSharp\SE07203-APDP-master\SE07203-F1\obj\Debug\net8.0\refint\SE07203-F1
 D:\CODE\CSharp\SE07203-APDP-master\SE07203-F1\obj\Debug\net8.0\SE07203-F1.pdb
 D:\CODE\CSharp\SE07203-APDP-master\SE07203-F1\obj\Debug\net8.0\SE07203-F1.genruntimeconfig.cache
 D:\CODE\CSharp\SE07203-APDP-master\SE07203-F1\obj\Debug\net8.0\ref\SE07203-F1.dll
+D:\CODE\CSharp\SE07203-APDP-master\SE07203-F1\obj\Debug\net8.0\SE07203-F1.sourcelink.json
