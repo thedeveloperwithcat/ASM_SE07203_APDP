@@ -69,6 +69,13 @@ namespace SE07203_F1.Controllers
                 _context.SaveChanges();
             }
             return RedirectToAction("Index");
+
         }
+        public async Task<IActionResult> Edit(int id, string name, string description)
+        {
+            // submit đúng hay chưa 
+            return RedirectToAction("Index");
+        }
+
     }
 }

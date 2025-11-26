@@ -103,6 +103,36 @@
         var name = nameInput.Value;
         var description = nameInput.Value;
         // dùng XHR
-        // dugnf XML request
+        // dùng XML request
+        console.log("id="+id);
+
+
+
+        var xhr = XMLHttpRequest();
+
+        xhr.open('POST', 'Mytask/Edit',true);
+        xhr.setRequestHeader('Content-Type','application/x-www-form-urleancoded');
+
+        xhr.onload = function(){
+            if(xhr.status == 200){
+                try{
+                    var response = JSON.parse(xhr.responseText);
+                    if(response.success){
+                        alert('Update successfully');
+                        window.location.reload();
+                    }
+                }catch{
+                    error.log(e)
+                }
+            }
+        }
+        xhr.onerror = function(){
+            alert('error throw'); 
+        }
+        var data = 'id =' + encodeURIComponent(id;
+            
     }
+
+
+
 </script>
