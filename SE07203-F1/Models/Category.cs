@@ -9,5 +9,6 @@ namespace SE07203_F1.Models
         [Required]
         [DataType(DataType.Text)]
         public string Name { get; set; }
+        public ICollection<MyTask> MyTasks { get; set; }
     }
 }

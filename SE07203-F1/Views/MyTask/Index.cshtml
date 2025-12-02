@@ -59,7 +59,8 @@
                                     </th>
                                     <th>
                                         @t?.Category?.Name
-                                        <input type="text" name="=Description" value="@t.Description" disabled class="form-control m-100" id<>/>
+                                        <input type="text" name="Description" value="@t.Description" disabled class="form-control m-100" />
+
                                     </th>
                                     <th>
                                         <form action = "Remove" asp-controller="MyTask" method="DELETE">
@@ -108,7 +109,8 @@
 
 
 
-        var xhr = XMLHttpRequest();
+        var xhr = new XMLHttpRequest();
+
 
         xhr.open('POST', 'Mytask/Edit',true);
         xhr.setRequestHeader('Content-Type','application/x-www-form-urleancoded');
@@ -129,7 +131,7 @@
         xhr.onerror = function(){
             alert('error throw'); 
         }
-        var data = 'id =' + encodeURIComponent(id;
+        var data = 'id=' + encodeURIComponent(id);
             
     }
 
