@@ -1,0 +1,19 @@
+@page
+@model CreateModel
+
+<h2>Add Student</h2>
+<form method="post">
+    <div>
+        <label>Full Name</label>
+        <input asp-for="Student.FullName" />
+    </div>
+    <div>
+        <label>Email</label>
+        <input asp-for="Student.Email" />
+    </div>
+    <div>
+        <label>Birth Date</label>
+        <input asp-for="Student.BirthDate" type="date" />
+    </div>
+    <button type="submit">Add</button>
+</form>
