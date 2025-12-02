@@ -340,3 +340,16 @@ D:\CODE\CSharp\SE07203-APDP-master\SE07203-F1\obj\Debug\net8.0\SE07203-F1.pdb
 D:\CODE\CSharp\SE07203-APDP-master\SE07203-F1\obj\Debug\net8.0\SE07203-F1.genruntimeconfig.cache
 D:\CODE\CSharp\SE07203-APDP-master\SE07203-F1\obj\Debug\net8.0\ref\SE07203-F1.dll
 D:\CODE\CSharp\SE07203-APDP-master\SE07203-F1\obj\Debug\net8.0\SE07203-F1.sourcelink.json
+D:\Apdp\SE07203-F1\obj\Debug\net8.0\SE07203-F1.csproj.AssemblyReference.cache
+D:\Apdp\SE07203-F1\obj\Debug\net8.0\rpswa.dswa.cache.json
+D:\Apdp\SE07203-F1\obj\Debug\net8.0\SE07203-F1.GeneratedMSBuildEditorConfig.editorconfig
+D:\Apdp\SE07203-F1\obj\Debug\net8.0\SE07203-F1.AssemblyInfoInputs.cache
+D:\Apdp\SE07203-F1\obj\Debug\net8.0\SE07203-F1.AssemblyInfo.cs
+D:\Apdp\SE07203-F1\obj\Debug\net8.0\SE07203-F1.csproj.CoreCompileInputs.cache
+D:\Apdp\SE07203-F1\obj\Debug\net8.0\SE07203-F1.MvcApplicationPartsAssemblyInfo.cache
+D:\Apdp\SE07203-F1\obj\Debug\net8.0\SE07203-F1.RazorAssemblyInfo.cache
+D:\Apdp\SE07203-F1\obj\Debug\net8.0\SE07203-F1.RazorAssemblyInfo.cs
+D:\Apdp\SE07203-F1\obj\Debug\net8.0\SE07203-F1.sourcelink.json
+D:\Apdp\SE07203-F1\obj\Debug\net8.0\SE07203-F1.dll
+D:\Apdp\SE07203-F1\obj\Debug\net8.0\refint\SE07203-F1.dll
+D:\Apdp\SE07203-F1\obj\Debug\net8.0\SE07203-F1.pdb
