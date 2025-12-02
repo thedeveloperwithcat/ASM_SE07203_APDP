@@ -17,6 +17,7 @@ namespace SE07203_F1.Data
         public DbSet<Account> Accounts { get; set; }
         public DbSet<MyTask> MyTasks { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Student> Students { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -55,6 +56,12 @@ namespace SE07203_F1.Data
                  .WithMany(c => c.MyTasks)
                  .HasForeignKey(x => x.CategoryId);
 
+            });
+            modelBuilder.Entity<Student>(e =>
+            {
+                e.ToTable("Students");
+                e.HasKey(e => e.Id);
+                e.Property(x => x.Id).HasColumnName("Id");
             });
             base.OnModelCreating(modelBuilder);
         }

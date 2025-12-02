@@ -1,23 +1,32 @@
-public class CreateModel : PageModel
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using SE07203_F1.Data; 
+using SE07203_F1.Models; 
+
+namespace SE07203_F1.Pages.Students
 {
-    private readonly ApplicationDbContext _context;
-
-    [BindProperty]
-    public Student Student { get; set; }
-
-    public CreateModel(ApplicationDbContext context)
+    public class CreateModel : PageModel
     {
-        _context = context;
-    }
+        private readonly ApplicationDbContext _context;
 
-    public IActionResult OnPost()
-    {
-        if (!ModelState.IsValid)
+        [BindProperty]
+        public Student Student { get; set; }
+
+        public CreateModel(ApplicationDbContext context)
         {
-            return Page();
+            _context = context;
         }
-        _context.Students.Add(Student);
-        _context.SaveChanges();
-        return RedirectToPage("Index");
+
+        public IActionResult OnPost()
+        {
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
+
+            _context.Students.Add(Student);
+            _context.SaveChanges();
+            return RedirectToPage("Index");
+        }
     }
 }
