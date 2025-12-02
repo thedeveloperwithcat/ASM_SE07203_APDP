@@ -59,14 +59,15 @@ namespace SE07203_F1.Controllers
             ViewBag.IsError = false;
             ViewBag.Success = false;
             ViewBag.Error = string.Empty;
-            var task = _context.MyTasks.FirstOrDefaultAsync(t => t.Id == id);
+            var task = await _context.MyTasks.FirstOrDefaultAsync(t => t.Id == id);
             //MyTask myTask = new MyTask();
             //myTask.Id = id;
             if (task != null)
             {
-                _context.MyTasks.Remove(myTask); // 202511191537 
+                _context.MyTasks.Remove(task);  // 202511191537 
                 // sau khi xóa thì lưu nó lại 
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
+                // _context.SaveChanges();
             }
             return RedirectToAction("Index");
 
