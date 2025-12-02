@@ -1,2 +1,33 @@
-.vs
-SE07203-F1/appsettings.json
+# Build Folders
+bin/
+obj/
+out/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Rider
+.idea/
+
+# ASP.NET / Blazor / Static Web Assets
+wwwroot/
+*.staticwebassets.cache.json
+*.AssemblyInfoInputs.cache
+*.assets.cache
+rpswa.dswa.cache.json
+
+# NuGet
+*.nupkg
+*.nuget.props
+*.nuget.targets
+packages/
+
+# Logs
+*.log
+
+# Others
+*.DS_Store
