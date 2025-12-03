@@ -1,0 +1,74 @@
+﻿@page
+@model StudentsIndexModel
+@using Microsoft.AspNetCore.Localization
+@{
+    var cookie = Request.Cookies[CookieRequestCultureProvider.DefaultCookieName];
+    var isEnglish = cookie != null && cookie.Contains("c=en-US");
+    var title = isEnglish ? "Home" : "Home";
+    var searchLabel = isEnglish ? "Enter info:" : "Nhập thông tin:";
+    var addLabel = isEnglish ? "Add student" : "Thêm sinh viên";
+    var submitText = isEnglish ? "Submit" : "Submit";
+    var homeBtnText = isEnglish ? "Home (switch to English)" : "Home";
+    var namePlaceholder = isEnglish ? "Name" : "Tên sinh viên";
+    var classPlaceholder = isEnglish ? "Class" : "Lớp";
+    var majorPlaceholder = isEnglish ? "Major" : "Chuyên ngành";
+    var statusPlaceholder = isEnglish ? "Status" : "Tình trạng";
+    var teacherPlaceholder = isEnglish ? "Teacher" : "Giáo viên";
+    var notePlaceholder = isEnglish ? "Note" : "Ghi chú";
+}
+
+<h2>@title</h2>
+
+<div style="margin-bottom:10px;">
+    <a class="btn btn-link" href="@Url.Action("SetLanguage", "Home", new { culture = "en-US", returnUrl = "/" })">@homeBtnText</a>
+</div>
+
+<form method="get" class="form-inline mb-3" style="margin-bottom:20px;">
+    <label for="search" class="mr-2">@searchLabel</label>
+    <input type="text" id="search" name="search" value="@Model.SearchTerm" class="form-control mr-2" />
+    <button type="submit" class="btn btn-secondary">@submitText</button>
+</form>
+
+<form method="post" class="mb-4">
+    <fieldset style="padding:10px;border:1px solid #ddd;margin-bottom:10px;">
+        <legend>@addLabel</legend>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <input name="Input.StudentId" placeholder="Student ID" value="@Model.Input?.StudentId" class="form-control" />
+            <input name="Input.Name" placeholder="@namePlaceholder" value="@Model.Input?.Name" class="form-control" />
+            <input name="Input.Class" placeholder="@classPlaceholder" value="@Model.Input?.Class" class="form-control" />
+            <input name="Input.Major" placeholder="@majorPlaceholder" value="@Model.Input?.Major" class="form-control" />
+            <input name="Input.Status" placeholder="@statusPlaceholder" value="@Model.Input?.Status" class="form-control" />
+            <input name="Input.Teacher" placeholder="@teacherPlaceholder" value="@Model.Input?.Teacher" class="form-control" />
+            <input name="Input.Note" placeholder="@notePlaceholder" value="@Model.Input?.Note" class="form-control" />
+            <button type="submit" class="btn btn-primary">@submitText</button>
+        </div>
+    </fieldset>
+</form>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>@(isEnglish ? "Student ID" : "Mã sinh viên")</th>
+            <th>@(isEnglish ? "Name" : "Tên sinh viên")</th>
+            <th>@(isEnglish ? "Class" : "Lớp")</th>
+            <th>@(isEnglish ? "Major" : "Chuyên ngành")</th>
+            <th>@(isEnglish ? "Status" : "Tình trạng")</th>
+            <th>@(isEnglish ? "Teacher" : "Giáo viên")</th>
+            <th>@(isEnglish ? "Note" : "Ghi chú")</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var student in Model.Students)
+        {
+            <tr>
+                <td>@student.StudentId</td>
+                <td>@student.Name</td>
+                <td>@student.Class</td>
+                <td>@student.Major</td>
+                <td>@student.Status</td>
+                <td>@student.Teacher</td>
+                <td>@student.Note</td>
+            </tr>
+        }
+    </tbody>
+</table>
