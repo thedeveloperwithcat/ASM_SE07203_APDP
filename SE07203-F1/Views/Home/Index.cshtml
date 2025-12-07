@@ -4,11 +4,27 @@
 
 @model Account
 
+<style>
+    .top-right-link {
+        position: absolute;
+        top: 20px;
+        right: 30px;
+        z-index: 100;
+    }
+</style>
+
+@if (ViewBag.isLogin)
+{
+    <div class="top-right-link">
+        <a href="/Students/Index" class="btn btn-primary">Quản lý sinh viên</a>
+    </div>
+}
+
 <div class="text-center">
-        @if (ViewBag.isConnectedDatabase)
-        {
+    @if (ViewBag.isConnectedDatabase)
+    {
         <h1> Connected Database </h1>
-        }
+    }
     <h1 class="display-4">Welcome 
         @if(ViewBag.isLogin)
         {
@@ -22,6 +38,5 @@
             <p>If dont have account, <a href="@Url.Action("Index", "Register")">Register</a>.</p>
         }
     </h1>
-    <a href="/Students">Manage Students</a>
     <input type="text" name="username" value="" class="form-text form-control"/>
 </div>

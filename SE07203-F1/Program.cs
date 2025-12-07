@@ -1,11 +1,16 @@
 using Microsoft.EntityFrameworkCore;
 using SE07203_F1.Data;
+using System.Globalization;
+using Microsoft.AspNetCore.Localization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+
+// Localization services (cookie-based)
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(
@@ -22,11 +27,20 @@ builder.Services.AddSession(
 
 var app = builder.Build();
 
+// Configure request localization before other middlewares that use culture.
+var supportedCultures = new[] { new CultureInfo("vi-VN"), new CultureInfo("en-US") };
+var localizationOptions = new RequestLocalizationOptions
+{
+    DefaultRequestCulture = new RequestCulture("vi-VN"),
+    SupportedCultures = supportedCultures.ToList(),
+    SupportedUICultures = supportedCultures.ToList()
+};
+app.UseRequestLocalization(localizationOptions);
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
@@ -44,3 +58,4 @@ app.MapControllerRoute(
 app.MapRazorPages();
 
 app.Run();
+
