@@ -161,10 +161,10 @@ D:\CODE\CSharp\ASM_SE07203_APDP\SE07203-F1\obj\Debug\net8.0\staticwebassets.buil
 D:\CODE\CSharp\ASM_SE07203_APDP\SE07203-F1\obj\Debug\net8.0\staticwebassets.build.json.cache
 D:\CODE\CSharp\ASM_SE07203_APDP\SE07203-F1\obj\Debug\net8.0\staticwebassets.development.json
 D:\CODE\CSharp\ASM_SE07203_APDP\SE07203-F1\obj\Debug\net8.0\staticwebassets.build.endpoints.json
-D:\CODE\CSharp\ASM_SE07203_APDP\SE07203-F1\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 D:\CODE\CSharp\ASM_SE07203_APDP\SE07203-F1\obj\Debug\net8.0\SE07203-F1.csproj.Up2Date
 D:\CODE\CSharp\ASM_SE07203_APDP\SE07203-F1\obj\Debug\net8.0\SE07203-F1.dll
 D:\CODE\CSharp\ASM_SE07203_APDP\SE07203-F1\obj\Debug\net8.0\refint\SE07203-F1.dll
 D:\CODE\CSharp\ASM_SE07203_APDP\SE07203-F1\obj\Debug\net8.0\SE07203-F1.pdb
 D:\CODE\CSharp\ASM_SE07203_APDP\SE07203-F1\obj\Debug\net8.0\SE07203-F1.genruntimeconfig.cache
 D:\CODE\CSharp\ASM_SE07203_APDP\SE07203-F1\obj\Debug\net8.0\ref\SE07203-F1.dll
+D:\CODE\CSharp\ASM_SE07203_APDP\SE07203-F1\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
