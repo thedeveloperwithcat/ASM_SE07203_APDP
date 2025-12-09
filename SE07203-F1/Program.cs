@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using SE07203_F1.Data;
 using System.Globalization;
 using Microsoft.AspNetCore.Localization;
@@ -13,10 +13,13 @@ builder.Services.AddRazorPages();
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(
+    options.UseSqlite( 
         builder.Configuration.GetConnectionString("DefaultConnection")
-        )
+    )
 );
+
+//builder.Services.AddDbContext<ApplicationDbContext>(options =>
+//    options.UseSqlite(connectionString));
 
 builder.Services.AddSession(
     options =>
