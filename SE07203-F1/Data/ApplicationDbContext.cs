@@ -14,9 +14,10 @@ namespace SE07203_F1.Data
         public DbSet<MyTask> MyTasks { get; set; }
         public DbSet<Student> Students { get; set; }
 
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // 1. Cấu hình bảng Accounts
+            // 1. Cấu hình bảng Accounts (Login/Register)
             modelBuilder.Entity<Account>(e =>
             {
                 e.ToTable("Accounts");
@@ -25,6 +26,10 @@ namespace SE07203_F1.Data
                 e.Property(x => x.Fullname).HasColumnName("Fullname").IsRequired();
                 e.Property(x => x.Username).HasColumnName("Username").IsRequired();
                 e.Property(x => x.Password).HasColumnName("Password").IsRequired();
+
+                // Bổ sung role và status
+                e.Property(x => x.Role).HasColumnName("Role").IsRequired(); // admin / teacher / student
+                e.Property(x => x.Status).HasColumnName("Status").IsRequired(); // active / inactive
             });
 
             // 2. Cấu hình bảng Categories
@@ -36,16 +41,21 @@ namespace SE07203_F1.Data
                 e.Property(x => x.Name).HasColumnName("Name").IsRequired();
             });
 
-            // 3. Cấu hình bảng Tasks (Map từ model MyTask vào bảng Tasks)
+            // 3. Cấu hình bảng Tasks (MyTask)
             modelBuilder.Entity<MyTask>(e =>
             {
-                e.ToTable("Tasks"); // Tên bảng trong DB vẫn là Tasks
+                e.ToTable("Tasks");
                 e.HasKey(x => x.Id);
                 e.Property(x => x.Id).HasColumnName("Id");
                 e.Property(x => x.Name).HasColumnName("Name").IsRequired();
                 e.Property(x => x.Description).HasColumnName("Description").IsRequired();
                 e.Property(x => x.CategoryId).HasColumnName("CategoryId");
                 e.Property(x => x.AccountId).HasColumnName("AccountId");
+
+                // Thêm các cột quản lý Task
+                e.Property(x => x.Status).HasColumnName("Status").HasDefaultValue("new"); // new / in_progress / completed / overdue
+                e.Property(x => x.Priority).HasColumnName("Priority").HasDefaultValue("medium"); // low / medium / high
+                e.Property(x => x.DueDate).HasColumnName("DueDate").IsRequired(false);
 
                 // Config quan hệ
                 e.HasOne(x => x.Account)
@@ -65,6 +75,18 @@ namespace SE07203_F1.Data
                 e.ToTable("Students");
                 e.HasKey(x => x.Id);
                 e.Property(x => x.Id).HasColumnName("Id");
+                e.Property(x => x.FullName).HasColumnName("FullName").IsRequired();
+                e.Property(x => x.Email).HasColumnName("Email").IsRequired();
+                e.Property(x => x.BirthDate).HasColumnName("BirthDate").IsRequired();
+                e.Property(x => x.StudentId).HasColumnName("StudentId").IsRequired(false);
+                e.Property(x => x.Name).HasColumnName("Name").IsRequired(false);
+                e.Property(x => x.Class).HasColumnName("Class").IsRequired(false);
+                e.Property(x => x.Major).HasColumnName("Major").IsRequired(false);
+                e.Property(x => x.Status).HasColumnName("Status").IsRequired(false);
+                e.Property(x => x.Teacher).HasColumnName("Teacher").IsRequired(false);
+                e.Property(x => x.Note).HasColumnName("Note").IsRequired(false);
+
+
             });
 
             base.OnModelCreating(modelBuilder);
