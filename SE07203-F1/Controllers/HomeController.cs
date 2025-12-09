@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using SE07203_F1.Data;
 using SE07203_F1.Models;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Http;
 
 namespace SE07203_F1.Controllers
 {
@@ -29,7 +31,7 @@ namespace SE07203_F1.Controllers
                 account.Id = Convert.ToInt32(HttpContext.Session.GetInt32("id"));
                 account.Username = Convert.ToString(HttpContext.Session.GetString("username")) + "@fpt.edu.vn";
             }
-            
+
             return View(account);
         }
 
@@ -59,6 +61,28 @@ namespace SE07203_F1.Controllers
         public IActionResult Privacy()
         {
             return View();
+        }
+
+        // Set language via cookie and redirect back
+        [HttpGet]
+        public IActionResult SetLanguage(string culture, string returnUrl = "/")
+        {
+            if (string.IsNullOrEmpty(culture))
+            {
+                culture = "en-US";
+            }
+
+            Response.Cookies.Append(
+                CookieRequestCultureProvider.DefaultCookieName,
+                CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
+                new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1), HttpOnly = false }
+            );
+
+            // ensure returnUrl is local
+            if (Url.IsLocalUrl(returnUrl))
+                return LocalRedirect(returnUrl);
+
+            return RedirectToAction("Index");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
