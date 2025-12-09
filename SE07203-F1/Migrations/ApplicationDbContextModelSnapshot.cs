@@ -24,6 +24,10 @@ namespace SE07203_F1.Migrations
                         .HasColumnType("INTEGER")
                         .HasColumnName("Id");
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Fullname")
                         .IsRequired()
                         .HasColumnType("TEXT")
@@ -34,12 +38,27 @@ namespace SE07203_F1.Migrations
                         .HasColumnType("TEXT")
                         .HasColumnName("Password");
 
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("Role");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasColumnName("Status");
+
+                    b.Property<int>("StudentId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("TEXT")
                         .HasColumnName("Username");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("StudentId");
 
                     b.ToTable("Accounts", (string)null);
                 });
@@ -68,11 +87,13 @@ namespace SE07203_F1.Migrations
                         .HasColumnType("INTEGER")
                         .HasColumnName("Id");
 
-                    b.Property<int>("AccountId")
+                    b.Property<int?>("AccountId")
+                        .IsRequired()
                         .HasColumnType("INTEGER")
                         .HasColumnName("AccountId");
 
-                    b.Property<int>("CategoryId")
+                    b.Property<int?>("CategoryId")
+                        .IsRequired()
                         .HasColumnType("INTEGER")
                         .HasColumnName("CategoryId");
 
@@ -81,10 +102,28 @@ namespace SE07203_F1.Migrations
                         .HasColumnType("TEXT")
                         .HasColumnName("Description");
 
+                    b.Property<DateTime?>("DueDate")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("DueDate");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT")
                         .HasColumnName("Name");
+
+                    b.Property<string>("Priority")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT")
+                        .HasDefaultValue("medium")
+                        .HasColumnName("Priority");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT")
+                        .HasDefaultValue("new")
+                        .HasColumnName("Status");
 
                     b.HasKey("Id");
 
@@ -103,47 +142,61 @@ namespace SE07203_F1.Migrations
                         .HasColumnName("Id");
 
                     b.Property<DateTime>("BirthDate")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasColumnName("BirthDate");
 
                     b.Property<string>("Class")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasColumnName("Class");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasColumnName("Email");
 
                     b.Property<string>("FullName")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasColumnName("FullName");
 
                     b.Property<string>("Major")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasColumnName("Major");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasColumnName("Name");
 
                     b.Property<string>("Note")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasColumnName("Note");
 
                     b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasColumnName("Status");
 
                     b.Property<string>("StudentId")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasColumnName("StudentId");
 
                     b.Property<string>("Teacher")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasColumnName("Teacher");
 
                     b.HasKey("Id");
 
                     b.ToTable("Students", (string)null);
+                });
+
+            modelBuilder.Entity("SE07203_F1.Models.Account", b =>
+                {
+                    b.HasOne("Student", "Student")
+                        .WithMany()
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("SE07203_F1.Models.MyTask", b =>
