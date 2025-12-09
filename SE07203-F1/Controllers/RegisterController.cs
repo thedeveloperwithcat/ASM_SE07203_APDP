@@ -50,10 +50,17 @@ namespace SE07203_F1.Controllers
                 // Băm mật khẩu trước khi lưu
                 account.Password = HashPassword(Password);
 
+                // --- BẮT BUỘC PHẢI THÊM ĐOẠN NÀY ---
+                account.Role = "Student";     
+                account.Status = "Active";   
+                account.Email = Username + "@gmail.com"; 
+
                 _context.Accounts.Add(account);
                 await _context.SaveChangesAsync();
+
                 ViewBag.Success = true;
                 ViewBag.Error = string.Empty;
+
                 return View("Index");
             }
             catch (Exception ex)
