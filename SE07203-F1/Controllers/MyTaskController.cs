@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using SE07203_F1.Data;
 using SE07203_F1.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace SE07203_F1.Controllers
 {

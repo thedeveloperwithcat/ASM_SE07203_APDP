@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "D:\\CODE\\CSharp\\Check\\SE07203-F1\\SE07203-F1.csproj": {}
+    "D:\\CODE\\CSharp\\ASM_SE07203_APDP\\SE07203-F1\\SE07203-F1.csproj": {}
   },
   "projects": {
-    "D:\\CODE\\CSharp\\Check\\SE07203-F1\\SE07203-F1.csproj": {
+    "D:\\CODE\\CSharp\\ASM_SE07203_APDP\\SE07203-F1\\SE07203-F1.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\CODE\\CSharp\\Check\\SE07203-F1\\SE07203-F1.csproj",
+        "projectUniqueName": "D:\\CODE\\CSharp\\ASM_SE07203_APDP\\SE07203-F1\\SE07203-F1.csproj",
         "projectName": "SE07203-F1",
-        "projectPath": "D:\\CODE\\CSharp\\Check\\SE07203-F1\\SE07203-F1.csproj",
-        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "D:\\CODE\\CSharp\\Check\\SE07203-F1\\obj\\",
+        "projectPath": "D:\\CODE\\CSharp\\ASM_SE07203_APDP\\SE07203-F1\\SE07203-F1.csproj",
+        "packagesPath": "C:\\Users\\trant\\.nuget\\packages\\",
+        "outputPath": "D:\\CODE\\CSharp\\ASM_SE07203_APDP\\SE07203-F1\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\trant\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -50,15 +50,23 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[8.0.10, )"
+            },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
-              "version": "[9.0.10, )"
+              "version": "[8.0.10, )"
+            },
+            "Microsoft.EntityFrameworkCore.Sqlite": {
+              "target": "Package",
+              "version": "[8.0.10, )"
             },
             "Microsoft.EntityFrameworkCore.Tools": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[10.0.0, )"
+              "version": "[8.0.10, )"
             }
           },
           "imports": [
@@ -80,7 +88,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.306/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
