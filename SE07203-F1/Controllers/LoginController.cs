@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SE07203_F1.Data;
-using System.Security.Cryptography; 
-using System.Text; 
+using System.Security.Cryptography;
+using System.Text;
 
 namespace SE07203_F1.Controllers
 {
@@ -16,6 +16,11 @@ namespace SE07203_F1.Controllers
         }
         public IActionResult Index()
         {
+            // Nếu đã đăng nhập rồi thì chuyển về Home
+            if (HttpContext.Session.GetString("username") != null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             return View();
         }
 
@@ -28,6 +33,7 @@ namespace SE07203_F1.Controllers
             }
         }
 
+        [HttpPost]
         public async Task<IActionResult> Login(string username, string password)
         {
             try
@@ -36,15 +42,15 @@ namespace SE07203_F1.Controllers
 
                 if (account == null)
                 {
-                    ViewBag.Error = "Tên đăng nhập hoặc mật khẩu không đúng.";
-                    return View("Error");
+                    ViewBag.Error = "Tên đăng nhập không tồn tại.";
+                    return View("Index"); // Trả về View Index kèm lỗi
                 }
                 string hashedPassword = HashPassword(password);
 
                 if (account.Password != hashedPassword)
                 {
-                    ViewBag.Error = "Tên đăng nhập hoặc mật khẩu không đúng.";
-                    return View("Error");
+                    ViewBag.Error = "Mật khẩu không đúng.";
+                    return View("Index");
                 }
                 else
                 {
@@ -52,16 +58,24 @@ namespace SE07203_F1.Controllers
                     HttpContext.Session.SetString("username", username);
                     HttpContext.Session.SetString("fullname", account.Fullname);
                     HttpContext.Session.SetInt32("id", account.Id);
-                    return View("Success");
+
+                    // --- QUAN TRỌNG: LƯU ROLE VÀO SESSION ---
+                    HttpContext.Session.SetString("role", account.Role);
+
+                    return RedirectToAction("Index", "Home"); // Chuyển hướng về trang chủ
                 }
-                
             }
             catch (Exception ex)
             {
-                ViewBag.Error = "Đã xảy ra lỗi hệ thống trong quá trình đăng nhập.";
-                return View("Error");
+                ViewBag.Error = "Đã xảy ra lỗi hệ thống: " + ex.Message;
+                return View("Index");
             }
-            
+        }
+
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction("Index", "Login");
         }
     }
 }
