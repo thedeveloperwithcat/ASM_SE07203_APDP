@@ -15,7 +15,6 @@ namespace SE07203_F1.Controllers
         {
             _context = context;
         }
-
         public IActionResult Index()
         {
             return View();
@@ -31,27 +30,12 @@ namespace SE07203_F1.Controllers
         }
 
         [HttpPost]
-        // BỔ SUNG: Tham số SecretKey để nhận mã bí mật
-        public async Task<IActionResult> RegisterAccount(string Username, string Fullname, string Password, string Role, string SecretKey)
+        // Thêm tham số Role vào đây
+        public async Task<IActionResult> RegisterAccount(string Username, string Fullname, string Password, string Role)
         {
             ViewBag.IsError = false;
             try
             {
-                // --- 1. LOGIC BẢO MẬT ADMIN (Kiểm tra đầu tiên) ---
-                if (Role == "Admin")
-                {
-                    // Mã bí mật quy định trước (nên khớp với hướng dẫn View)
-                    string requiredKey = "SE07203_ADMIN_KEY";
-
-                    if (SecretKey != requiredKey)
-                    {
-                        ViewBag.IsError = true;
-                        ViewBag.Error = "Sai mã bí mật! Bạn không có quyền đăng ký Admin.";
-                        return View("Index");
-                    }
-                }
-
-                // --- 2. Kiểm tra tài khoản tồn tại ---
                 var existingAccount = await _context.Accounts.FirstOrDefaultAsync(u => u.Username == Username);
                 if (existingAccount != null)
                 {
@@ -60,27 +44,29 @@ namespace SE07203_F1.Controllers
                     return View("Index");
                 }
 
-                // --- 3. Tạo tài khoản ---
                 Account account = new Account();
                 account.Username = Username;
                 account.Fullname = Fullname;
                 account.Password = HashPassword(Password);
-                account.Role = Role; // Lưu Role (Student/Teacher/Admin)
+
+                // Lấy Role từ form gửi lên (Student hoặc Teacher)
+                account.Role = Role;
+
                 account.Status = "Active";
-                account.Email = Username + "@gmail.com";
+                account.Email = Username + "@gmail.com"; // Logic cũ của bạn
 
                 _context.Accounts.Add(account);
                 await _context.SaveChangesAsync();
 
                 ViewBag.Success = true;
-                ViewBag.Error = null;
+                ViewBag.Error = null; // Xóa lỗi cũ nếu có
 
                 return View("Index");
             }
             catch (Exception ex)
             {
                 ViewBag.IsError = true;
-                ViewBag.Error = "Lỗi hệ thống: " + ex.Message;
+                ViewBag.Error = "Lỗi: " + ex.Message;
                 return View("Index");
             }
         }
