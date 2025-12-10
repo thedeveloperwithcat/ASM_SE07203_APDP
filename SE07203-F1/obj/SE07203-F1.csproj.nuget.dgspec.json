@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\CODE\\CSharp\\Check\\SE07203-F1\\SE07203-F1.csproj": {}
+    "D:\\APDDPP\\SE07203-F1\\SE07203-F1.csproj": {}
   },
   "projects": {
-    "D:\\CODE\\CSharp\\Check\\SE07203-F1\\SE07203-F1.csproj": {
+    "D:\\APDDPP\\SE07203-F1\\SE07203-F1.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\CODE\\CSharp\\Check\\SE07203-F1\\SE07203-F1.csproj",
+        "projectUniqueName": "D:\\APDDPP\\SE07203-F1\\SE07203-F1.csproj",
         "projectName": "SE07203-F1",
-        "projectPath": "D:\\CODE\\CSharp\\Check\\SE07203-F1\\SE07203-F1.csproj",
+        "projectPath": "D:\\APDDPP\\SE07203-F1\\SE07203-F1.csproj",
         "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "D:\\CODE\\CSharp\\Check\\SE07203-F1\\obj\\",
+        "outputPath": "D:\\APDDPP\\SE07203-F1\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
