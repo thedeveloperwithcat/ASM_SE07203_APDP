@@ -1,4 +1,109 @@
-﻿@page
+﻿@model IEnumerable<Student>
+@using Microsoft.AspNetCore.Localization
+
+@{
+    ViewData["Title"] = "Quản lý sinh viên";
+    // --- LOGIC ĐA NGÔN NGỮ ---
+    var cookie = Context.Request.Cookies[CookieRequestCultureProvider.DefaultCookieName];
+    var isEnglish = cookie != null && cookie.Contains("c=en-US");
+
+    // Các biến text...
+    var title = isEnglish ? "Student List" : "Danh sách sinh viên";
+    var addLabel = isEnglish ? "Add student" : "Thêm sinh viên";
+    var submitText = isEnglish ? "Submit" : "Lưu";
+}
+
+<h2>@title</h2>
+
+@* Nút chuyển ngôn ngữ *@
+<div style="margin-bottom:10px;">
+    <a class="btn btn-link" href="@Url.Action("SetLanguage", "Home", new { culture = isEnglish ? "vi-VN" : "en-US", returnUrl = "/Students/Index" })">
+        @(isEnglish ? "Switch to Vietnamese" : "Chuyển sang Tiếng Anh")
+    </a>
+</div>
+
+@* FORM TÌM KIẾM *@
+<form asp-action="Index" method="get" class="form-inline mb-3">
+    <input type="text" name="search" value="@ViewData["CurrentFilter"]" class="form-control mr-2" placeholder="Tìm tên hoặc lớp..." />
+    <button type="submit" class="btn btn-secondary">Tìm kiếm</button>
+</form>
+
+<hr />
+
+@* --- KHU VỰC HIỂN THỊ LỖI (QUAN TRỌNG) --- *@
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        <strong>Có lỗi xảy ra:</strong>
+        <div asp-validation-summary="All" class="text-danger"></div>
+    </div>
+}
+
+@* FORM THÊM NHANH *@
+<form asp-action="Create" method="post" class="mb-4">
+    <fieldset style="padding:10px;border:1px solid #ddd;margin-bottom:10px;">
+        <legend>@addLabel</legend>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+
+            @* Ô nhập Mã SV (StudentId - dạng chuỗi SE123) *@
+            <input name="StudentId" placeholder="Mã SV (SE...)" class="form-control" style="width: 120px;" />
+
+            @* Ô nhập Tên *@
+            <input name="Name" placeholder="Tên sinh viên" class="form-control" />
+
+            @* Các ô khác *@
+            <input name="Class" placeholder="Lớp" class="form-control" style="width: 100px;" />
+            <input name="Major" placeholder="Chuyên ngành" class="form-control" />
+            <input name="Status" placeholder="Tình trạng" class="form-control" />
+            <input name="Teacher" placeholder="Giáo viên" class="form-control" />
+            <input name="Note" placeholder="Ghi chú" class="form-control" />
+
+            @* Ẩn AccountId đi vì Controller tự xử lý rồi *@
+            <button type="submit" class="btn btn-primary">@submitText</button>
+        </div>
+    </fieldset>
+</form>
+
+@* BẢNG HIỂN THỊ *@
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Mã SV</th>
+            <th>Tên</th>
+            <th>Lớp</th>
+            <th>Ngành</th>
+            <th>Trạng thái</th>
+            <th>Giáo viên</th>
+            <th>Ghi chú</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            @foreach (var student in Model)
+            {
+                <tr>
+                    <td>@student.Id</td>
+                    <td>@student.StudentId</td>
+                    <td>@student.Name</td>
+                    <td>@student.Class</td>
+                    <td>@student.Major</td>
+                    <td>@student.Status</td>
+                    <td>@student.Teacher</td>
+                    <td>@student.Note</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+
+
+
+
+@* 
+@page
 @model StudentsIndexModel
 @using Microsoft.AspNetCore.Localization
 @{
@@ -71,4 +176,4 @@
             </tr>
         }
     </tbody>
-</table>
+</table> *@
