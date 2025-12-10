@@ -1,49 +1,82 @@
-﻿<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - SE07203_F1</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/SE07203_F1.styles.css" asp-append-version="true" />
-</head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">SE07203_F1</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
+﻿<body>
+    <div class="d-flex" id="wrapper">
+        <div class="bg-dark text-white" id="sidebar-wrapper" style="min-width: 250px; min-height: 100vh;">
+            <div class="sidebar-heading text-center py-4 fs-4 fw-bold border-bottom">
+                SE07203 Manager
+            </div>
+            <div class="list-group list-group-flush my-3">
+                @{
+                    var role = Context.Session.GetString("role");
+                }
+
+                <a asp-controller="Home" asp-action="Index" class="list-group-item list-group-item-action bg-dark text-white">
+                    <i class="bi bi-house"></i> Trang chủ
+                </a>
+
+                @if (role == "Admin")
+                {
+                    <div class="text-muted small fw-bold px-3 mt-3">QUẢN TRỊ</div>
+                    <a asp-controller="Admin" asp-action="Students" class="list-group-item list-group-item-action bg-dark text-white">Quản lý Sinh viên</a>
+                    <a asp-controller="Admin" asp-action="Teachers" class="list-group-item list-group-item-action bg-dark text-white">Quản lý Giáo viên</a>
+                    <a asp-controller="Admin" asp-action="Tasks" class="list-group-item list-group-item-action bg-dark text-white">Quản lý Task</a>
+                }
+
+                @if (role == "Teacher")
+                {
+                    <div class="text-muted small fw-bold px-3 mt-3">GIÁO VIÊN</div>
+                    <a asp-controller="MyTask" asp-action="Index" class="list-group-item list-group-item-action bg-dark text-white">Giao bài tập (Tasks)</a>
+                }
+
+                @if (role == "Student")
+                {
+                    <div class="text-muted small fw-bold px-3 mt-3">SINH VIÊN</div>
+                    <a asp-controller="StudentTask" asp-action="Index" class="list-group-item list-group-item-action bg-dark text-white">Bài tập của tôi</a>
+                }
+            </div>
+        </div>
+
+        <div id="page-content-wrapper" class="w-100">
+            <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm px-4">
+                <button class="btn btn-primary" id="menu-toggle">☰ Menu</button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
+                        @if (Context.Session.GetString("username") != null)
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle fw-bold" href="#" role="button" data-bs-toggle="dropdown">
+                                    Xin chào, @Context.Session.GetString("fullname")
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li><a class="dropdown-item" href="#">Hồ sơ</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item text-danger" asp-controller="Login" asp-action="Logout">Đăng xuất</a></li>
+                                </ul>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item"><a class="nav-link" asp-controller="Login" asp-action="Index">Đăng nhập</a></li>
+                        }
                     </ul>
                 </div>
+            </nav>
+
+            <div class="container-fluid p-4">
+                @RenderBody()
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+        </div>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - SE07203_F1 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
+    <script>
+        document.getElementById("menu-toggle").addEventListener("click", function(){
+            var sidebar = document.getElementById("sidebar-wrapper");
+            if(sidebar.style.display === "none") sidebar.style.display = "block";
+            else sidebar.style.display = "none";
+        });
+    </script>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
-</html>

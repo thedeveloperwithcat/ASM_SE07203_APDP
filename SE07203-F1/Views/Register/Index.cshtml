@@ -1,52 +1,94 @@
-﻿
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
-@{
+﻿@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Đăng ký";
 }
-@model Account
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-12 text-center">
-            <h1>
-                Register
-            </h1>
-        </div>
-        <div class="col-4">
-        </div>
-        <div class="col-4">
-            @if (ViewBag.IsError && String.Compare(ViewBag.Error, String.Empty) != 0)
+<div class="row justify-content-center mt-4">
+    <div class="col-md-8 col-lg-5">
+        <div class="card shadow-lg border-0 rounded-3">
+            <div class="card-header bg-success text-white text-center py-3 rounded-top-3">
+                <h4 class="mb-0 fw-bold">ĐĂNG KÝ TÀI KHOẢN</h4>
+            </div>
+            <div class="card-body p-4">
+
+                @if (ViewBag.IsError == true)
+                {
+                    <div class="alert alert-danger">
+                        <i class="bi bi-exclamation-octagon"></i> @ViewBag.Error
+                    </div>
+                }
+
+                @if (ViewBag.Success == true)
+                {
+                    <div class="alert alert-success text-center">
+                        <h4><i class="bi bi-check-circle"></i> Đăng ký thành công!</h4>
+                        <p>Tài khoản của bạn đã được tạo.</p>
+                        <a asp-controller="Login" asp-action="Index" class="btn btn-outline-success mt-2">Về trang đăng nhập</a>
+                    </div>
+                }
+                else
+                {
+                    <form asp-action="RegisterAccount" asp-controller="Register" method="POST">
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Họ và tên</label>
+                            <input type="text" class="form-control" name="Fullname" placeholder="Nguyễn Văn A" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Tên đăng nhập</label>
+                            <input type="text" class="form-control" name="Username" placeholder="username123" required>
+                            <div class="form-text">Email sẽ được tự động tạo theo username (username@gmail.com)</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Mật khẩu</label>
+                            <input type="password" class="form-control" name="Password" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Bạn là ai?</label>
+                            <select class="form-select" name="Role" required>
+                                <option value="" disabled selected>-- Chọn vai trò --</option>
+                                <option value="Student">Sinh viên (Student)</option>
+                                <option value="Teacher">Giáo viên (Teacher)</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Vai trò</label>
+                            <select class="form-select" name="Role" id="roleSelect" onchange="toggleSecretKey()">
+                                <option value="Student">Sinh viên</option>
+                                <option value="Teacher">Giáo viên</option>
+                                <option value="Admin">Quản trị viên (Cần mã bí mật)</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3" id="secretKeyGroup" style="display:none;">
+                            <label class="form-label text-danger">Mã bí mật (Dành cho Admin)</label>
+                            <input type="password" class="form-control" name="SecretKey" placeholder="Nhập mã xác thực quản trị...">
+                        </div>
+
+                        <script>
+                            function toggleSecretKey() {
+                                var role = document.getElementById("roleSelect").value;
+                                var secretInput = document.getElementById("secretKeyGroup");
+                                secretInput.style.display = (role === "Admin") ? "block" : "none";
+                            }
+                        </script>
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-success py-2 fw-bold">
+                                <i class="bi bi-person-plus"></i> Đăng ký
+                            </button>
+                        </div>
+                    </form>
+                }
+            </div>
+            @if (ViewBag.Success != true)
             {
-                <div class="alert alert-danger" role="alert">
-                    Error Appeared: @ViewBag.Error
+                <div class="card-footer text-center bg-light py-3">
+                    <span class="text-muted">Đã có tài khoản?</span>
+                    <a asp-controller="Login" asp-action="Index" class="text-decoration-none fw-bold text-success">Đăng nhập</a>
                 </div>
-            }else if (!ViewBag.IsError && String.Compare(ViewBag.Error, String.Empty) == 0)
-            {
-                <div class="alert alert-success" role="alert">
-                    Register Successfully!! 
-                </div>
-                <p>Please <a href="@Url.Action("Index", "Login")">Login</a>.</p>
             }
-            <form asp-action="RegisterAccount" method="POST">
-                <div class="mb-3">
-                    <label asp-for="Username" class="form-label">Username</label>
-                    <input type="text" class="form-control" id="username" asp-for="Username" name="Username">
-                </div>
-                <div class="mb-3">
-                    <label asp-for="Fullname" class="form-label">Fullname</label>
-                    <input type="text" class="form-control" id="fullname" asp-for="Fullname" name="Fullname">
-                </div>
-                <div class="mb-3">
-                    <label asp-for="Password" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="password" asp-for="Password" name="Password">
-                </div>
-                <button class="btn btn-outline-success w-100">
-                    Submit
-                </button>    
-            </form>
-        </div>
-        <div class="col-4">
-
         </div>
     </div>
 </div>
