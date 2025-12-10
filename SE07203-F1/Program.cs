@@ -1,7 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Localization;
+using Microsoft.EntityFrameworkCore;
 using SE07203_F1.Data;
+using SE07203_F1.Services;
 using System.Globalization;
-using Microsoft.AspNetCore.Localization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +21,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 //builder.Services.AddDbContext<ApplicationDbContext>(options =>
 //    options.UseSqlite(connectionString));
+
+
+builder.Services.AddSingleton<LoginCounter>();
 
 builder.Services.AddSession(
     options =>
