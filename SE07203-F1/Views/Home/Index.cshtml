@@ -25,14 +25,27 @@
                 <h5 class="card-title text-success">Xin chào, @Context.Session.GetString("fullname")!</h5>
                 <p class="card-text">Bạn đang đăng nhập với vai trò: <strong>@Context.Session.GetString("role")</strong></p>
 
-                @if (Context.Session.GetString("role") == "Teacher")
-                {
-                    <a asp-controller="MyTask" asp-action="Index" class="btn btn-primary">Quản lý Task của tôi</a>
-                }
-                else if (Context.Session.GetString("role") == "Student")
-                {
-                    <a asp-controller="StudentTask" asp-action="Index" class="btn btn-primary">Xem bài tập được giao</a>
-                }
+                <div class="d-flex justify-content-center gap-2 mt-3">
+                    @* Logic cho Giáo viên hoặc Admin *@
+                    @if (Context.Session.GetString("role") == "Teacher" || Context.Session.GetString("role") == "Admin")
+                    {
+                        <a asp-controller="MyTask" asp-action="Index" class="btn btn-primary">
+                            <i class="bi bi-list-check"></i> Quản lý Task
+                        </a>
+
+                        @* Nút CRUD Sinh viên MỚI *@
+                        <a asp-controller="Students" asp-action="Index" class="btn btn-success">
+                            <i class="bi bi-people-fill"></i> Quản lý Sinh viên
+                        </a>
+                    }
+                    @* Logic cho Sinh viên *@
+                    else if (Context.Session.GetString("role") == "Student")
+                    {
+                        <a asp-controller="StudentTask" asp-action="Index" class="btn btn-primary">
+                            <i class="bi bi-journal-text"></i> Xem bài tập được giao
+                        </a>
+                    }
+                </div>
             </div>
         </div>
     }
@@ -61,3 +74,49 @@
         </div>
     </div>
 </div>
+
+
+
+
+@* @{
+    ViewData["Title"] = "Home Page";
+}
+
+@model Account
+
+<style>
+    .top-right-link {
+        position: absolute;
+        top: 20px;
+        right: 30px;
+        z-index: 100;
+    }
+</style>
+
+@if (ViewBag.isLogin)
+{
+    <div class="top-right-link">
+        <a href="/Students/Index" class="btn btn-primary">Quản lý sinh viên</a>
+    </div>
+}
+
+<div class="text-center">
+    @if (ViewBag.isConnectedDatabase)
+    {
+        <h1> Connected Database </h1>
+    }
+    <h1 class="display-4">Welcome 
+        @if(ViewBag.isLogin)
+        {
+            <span>User @Model.Fullname</span>
+            <span>Go to Task List, <a href="@Url.Action("Index", "MyTask")">Here</a>.</span>
+        }
+        else
+        {
+            @Model.Fullname
+            <p>Please <a href="@Url.Action("Index", "Login")">Login</a>.</p>
+            <p>If dont have account, <a href="@Url.Action("Index", "Register")">Register</a>.</p>
+        }
+    </h1>
+    <input type="text" name="username" value="" class="form-text form-control"/>
+</div> *@
