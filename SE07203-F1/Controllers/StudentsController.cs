@@ -33,7 +33,7 @@ namespace SE07203_F1.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Student student)
         {
-            // --- 1. XỬ LÝ ACCOUNT (Tránh lỗi khóa ngoại) ---
+            // XỬ LÝ ACCOUNT (Tránh lỗi khóa ngoại) ---
             var defaultAccount = await _context.Accounts.FirstOrDefaultAsync();
             if (defaultAccount == null)
             {
@@ -51,32 +51,28 @@ namespace SE07203_F1.Controllers
             }
             student.AccountId = defaultAccount.Id;
 
-            // --- 2. XỬ LÝ DỮ LIỆU THIẾU (Tránh lỗi Validation) ---
-            // Nếu người dùng không nhập StudentId (Mã SV dạng chuỗi), tự sinh ngẫu nhiên
             if (string.IsNullOrEmpty(student.StudentId))
             {
                 student.StudentId = "SE" + DateTime.Now.Ticks.ToString().Substring(10);
             }
-            // Mấy trường này trong Model không cho null, nên nếu form gửi lên null phải gán giá trị mặc định
-            student.FullName ??= student.Name; // Gán FullName bằng Name nếu thiếu
-            student.Email ??= "student@test.com"; // Email tạm
+            student.FullName ??= student.Name; 
+            student.Email ??= "student@test.com"; 
 
-            // --- 3. BỎ QUA VALIDATION KHÔNG CẦN THIẾT ---
-            // Báo cho hệ thống biết: "Đừng kiểm tra Account và AssignedTasks, tôi tự lo được"
+            // BỎ QUA VALIDATION KHÔNG CẦN THIẾT ---
             ModelState.Remove("Account");
             ModelState.Remove("AssignedTasks");
-            ModelState.Remove("StudentId"); // Đã xử lý ở trên
+            ModelState.Remove("StudentId"); 
             ModelState.Remove("FullName");
             ModelState.Remove("Email");
 
-            // --- 4. LƯU DATABASE ---
+            // LƯU DATABASE ---
             if (ModelState.IsValid)
             {
                 try
                 {
                     _context.Add(student);
                     await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index)); // Lưu xong tải lại trang
+                    return RedirectToAction(nameof(Index)); 
                 }
                 catch (Exception ex)
                 {
