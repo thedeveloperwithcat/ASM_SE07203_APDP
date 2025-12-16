@@ -12,8 +12,9 @@ namespace SE07203_F1.Data
         public DbSet<Account> Accounts { get; set; }
         public DbSet<Student> Students { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
-        public DbSet<MyTask> MyTasks { get; set; }
         public DbSet<Category> Categories { get; set; }
+
+        public DbSet<MyTask> MyTasks { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -37,18 +38,7 @@ namespace SE07203_F1.Data
                 .HasForeignKey<Teacher>(t => t.AccountId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // 4. Quan hệ Task: Teacher tạo, Student làm
-            modelBuilder.Entity<MyTask>()
-                .HasOne(t => t.Creator)
-                .WithMany(teacher => teacher.CreatedTasks)
-                .HasForeignKey(t => t.CreatorId)
-                .OnDelete(DeleteBehavior.Restrict); // Xóa GV không xóa Task ngay (để lưu vết)
 
-            modelBuilder.Entity<MyTask>()
-                .HasOne(t => t.Assignee)
-                .WithMany(student => student.AssignedTasks)
-                .HasForeignKey(t => t.AssigneeId)
-                .OnDelete(DeleteBehavior.Cascade);
 
             // 5. Seed Data (Tạo sẵn tài khoản Admin mặc định)
             // Vì Admin không đăng ký công khai để bảo mật

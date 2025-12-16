@@ -1,179 +1,105 @@
-﻿@model IEnumerable<Student>
-@using Microsoft.AspNetCore.Localization
+﻿@model IEnumerable<SE07203_F1.Models.Student>
 
 @{
-    ViewData["Title"] = "Quản lý sinh viên";
-    // --- LOGIC ĐA NGÔN NGỮ ---
-    var cookie = Context.Request.Cookies[CookieRequestCultureProvider.DefaultCookieName];
-    var isEnglish = cookie != null && cookie.Contains("c=en-US");
-
-    // Các biến text...
-    var title = isEnglish ? "Student List" : "Danh sách sinh viên";
-    var addLabel = isEnglish ? "Add student" : "Thêm sinh viên";
-    var submitText = isEnglish ? "Submit" : "Lưu";
+    ViewData["Title"] = "Danh sách sinh viên";
 }
 
-<h2>@title</h2>
-
-@* Nút chuyển ngôn ngữ *@
-<div style="margin-bottom:10px;">
-    <a class="btn btn-link" href="@Url.Action("SetLanguage", "Home", new { culture = isEnglish ? "vi-VN" : "en-US", returnUrl = "/Students/Index" })">
-        @(isEnglish ? "Switch to Vietnamese" : "Chuyển sang Tiếng Anh")
-    </a>
-</div>
-
-@* FORM TÌM KIẾM *@
-<form asp-action="Index" method="get" class="form-inline mb-3">
-    <input type="text" name="search" value="@ViewData["CurrentFilter"]" class="form-control mr-2" placeholder="Tìm tên hoặc lớp..." />
-    <button type="submit" class="btn btn-secondary">Tìm kiếm</button>
-</form>
-
-<hr />
-
-@* --- KHU VỰC HIỂN THỊ LỖI (QUAN TRỌNG) --- *@
-@if (!ViewData.ModelState.IsValid)
-{
-    <div class="alert alert-danger">
-        <strong>Có lỗi xảy ra:</strong>
-        <div asp-validation-summary="All" class="text-danger"></div>
+<div class="container-fluid mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="text-primary">🎓 Danh sách sinh viên</h2>
+        @* Nút thêm mới *@
+        <a asp-action="Create" class="btn btn-success">
+            <i class="fa fa-plus"></i> + Thêm sinh viên
+        </a>
     </div>
-}
 
-@* FORM THÊM NHANH *@
-<form asp-action="Create" method="post" class="mb-4">
-    <fieldset style="padding:10px;border:1px solid #ddd;margin-bottom:10px;">
-        <legend>@addLabel</legend>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+    @* Form Tìm kiếm *@
+    <div class="card p-3 mb-4 bg-light shadow-sm">
+        <form asp-action="Index" method="get" class="row g-2 align-items-center">
+            <div class="col-auto flex-grow-1">
+                <input type="text" name="searchString" value="@ViewData["CurrentFilter"]"
+                       class="form-control" placeholder="🔍 Nhập tên, mã SV hoặc email..." />
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+            </div>
+            <div class="col-auto">
+                <a asp-action="Index" class="btn btn-outline-secondary">Đặt lại</a>
+            </div>
+        </form>
+    </div>
 
-            @* Ô nhập Mã SV (StudentId - dạng chuỗi SE123) *@
-            <input name="StudentId" placeholder="Mã SV (SE...)" class="form-control" style="width: 120px;" />
-
-            @* Ô nhập Tên *@
-            <input name="Name" placeholder="Tên sinh viên" class="form-control" />
-
-            @* Các ô khác *@
-            <input name="Class" placeholder="Lớp" class="form-control" style="width: 100px;" />
-            <input name="Major" placeholder="Chuyên ngành" class="form-control" />
-            <input name="Status" placeholder="Tình trạng" class="form-control" />
-            <input name="Teacher" placeholder="Giáo viên" class="form-control" />
-            <input name="Note" placeholder="Ghi chú" class="form-control" />
-
-            @* Ẩn AccountId đi vì Controller tự xử lý rồi *@
-            <button type="submit" class="btn btn-primary">@submitText</button>
-        </div>
-    </fieldset>
-</form>
-
-@* BẢNG HIỂN THỊ *@
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Mã SV</th>
-            <th>Tên</th>
-            <th>Lớp</th>
-            <th>Ngành</th>
-            <th>Trạng thái</th>
-            <th>Giáo viên</th>
-            <th>Ghi chú</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (Model != null)
-        {
-            @foreach (var student in Model)
-            {
+    @* Bảng danh sách *@
+    <div class="table-responsive">
+        <table class="table table-striped table-hover table-bordered align-middle">
+            <thead class="table-dark text-center">
                 <tr>
-                    <td>@student.Id</td>
-                    <td>@student.StudentId</td>
-                    <td>@student.Name</td>
-                    <td>@student.Class</td>
-                    <td>@student.Major</td>
-                    <td>@student.Status</td>
-                    <td>@student.Teacher</td>
-                    <td>@student.Note</td>
+                    <th>Mã SV</th>
+                    <th>Họ và Tên</th>
+                    <th>Lớp</th>
+                    <th>Ngành</th>
+                    <th>Email</th>
+                    <th>Trạng thái</th>
+                    @* CỘT QUAN TRỌNG: Nút Sửa/Xóa nằm ở đây *@
+                    <th style="width: 180px;">Hành động</th>
                 </tr>
-            }
-        }
-    </tbody>
-</table>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="fw-bold text-center">@item.StudentId</td>
+                            <td>@item.FullName</td>
+                            <td class="text-center">@item.Class</td>
+                            <td class="text-center">@item.Major</td>
+                            <td>@item.Email</td>
+                            <td class="text-center">
+                                @if (item.Status == "Active")
+                                {
+                                    <span class="badge bg-success">Đang học</span>
+                                }
+                                else if (item.Status == "Inactive")
+                                {
+                                    <span class="badge bg-warning text-dark">Bảo lưu</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">@item.Status</span>
+                                }
+                            </td>
 
+                            @* --- KHU VỰC NÚT SỬA / XÓA --- *@
+                            <td class="text-center">
+                                <div class="d-flex justify-content-center gap-2">
 
+                                    @* 1. Nút Sửa (Link đến trang Edit) *@
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">
+                                        Sửa
+                                    </a>
 
+                                    @* 2. Nút Xóa (Dùng Form để bảo mật) *@
+                                    <form asp-action="Delete" asp-route-id="@item.Id" method="post"
+                                          onsubmit="return confirm('⚠️ Bạn có chắc chắn muốn xóa sinh viên: @item.FullName không?');">
+                                        <button type="submit" class="btn btn-sm btn-danger">Xóa</button>
+                                    </form>
 
-
-@* 
-@page
-@model StudentsIndexModel
-@using Microsoft.AspNetCore.Localization
-@{
-    var cookie = Request.Cookies[CookieRequestCultureProvider.DefaultCookieName];
-    var isEnglish = cookie != null && cookie.Contains("c=en-US");
-    var title = isEnglish ? "Home" : "Home";
-    var searchLabel = isEnglish ? "Enter info:" : "Nhập thông tin:";
-    var addLabel = isEnglish ? "Add student" : "Thêm sinh viên";
-    var submitText = isEnglish ? "Submit" : "Submit";
-    var homeBtnText = isEnglish ? "Home (switch to English)" : "Home";
-    var namePlaceholder = isEnglish ? "Name" : "Tên sinh viên";
-    var classPlaceholder = isEnglish ? "Class" : "Lớp";
-    var majorPlaceholder = isEnglish ? "Major" : "Chuyên ngành";
-    var statusPlaceholder = isEnglish ? "Status" : "Tình trạng";
-    var teacherPlaceholder = isEnglish ? "Teacher" : "Giáo viên";
-    var notePlaceholder = isEnglish ? "Note" : "Ghi chú";
-}
-
-<h2>@title</h2>
-
-<div style="margin-bottom:10px;">
-    <a class="btn btn-link" href="@Url.Action("SetLanguage", "Home", new { culture = "en-US", returnUrl = "/" })">@homeBtnText</a>
+                                </div>
+                            </td>
+                            @* ----------------------------- *@
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="7" class="text-center py-4 text-muted">
+                            <em>Hiện chưa có sinh viên nào. Hãy bấm nút "Thêm sinh viên" để tạo mới.</em>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
-
-<form method="get" class="form-inline mb-3" style="margin-bottom:20px;">
-    <label for="search" class="mr-2">@searchLabel</label>
-    <input type="text" id="search" name="search" value="@Model.SearchTerm" class="form-control mr-2" />
-    <button type="submit" class="btn btn-secondary">@submitText</button>
-</form>
-
-<form method="post" class="mb-4">
-    <fieldset style="padding:10px;border:1px solid #ddd;margin-bottom:10px;">
-        <legend>@addLabel</legend>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;">
-            <input name="Input.StudentId" placeholder="Student ID" value="@Model.Input?.StudentId" class="form-control" />
-            <input name="Input.Name" placeholder="@namePlaceholder" value="@Model.Input?.Name" class="form-control" />
-            <input name="Input.Class" placeholder="@classPlaceholder" value="@Model.Input?.Class" class="form-control" />
-            <input name="Input.Major" placeholder="@majorPlaceholder" value="@Model.Input?.Major" class="form-control" />
-            <input name="Input.Status" placeholder="@statusPlaceholder" value="@Model.Input?.Status" class="form-control" />
-            <input name="Input.Teacher" placeholder="@teacherPlaceholder" value="@Model.Input?.Teacher" class="form-control" />
-            <input name="Input.Note" placeholder="@notePlaceholder" value="@Model.Input?.Note" class="form-control" />
-            <button type="submit" class="btn btn-primary">@submitText</button>
-        </div>
-    </fieldset>
-</form>
-
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>@(isEnglish ? "Student ID" : "Mã sinh viên")</th>
-            <th>@(isEnglish ? "Name" : "Tên sinh viên")</th>
-            <th>@(isEnglish ? "Class" : "Lớp")</th>
-            <th>@(isEnglish ? "Major" : "Chuyên ngành")</th>
-            <th>@(isEnglish ? "Status" : "Tình trạng")</th>
-            <th>@(isEnglish ? "Teacher" : "Giáo viên")</th>
-            <th>@(isEnglish ? "Note" : "Ghi chú")</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var student in Model.Students)
-        {
-            <tr>
-                <td>@student.StudentId</td>
-                <td>@student.Name</td>
-                <td>@student.Class</td>
-                <td>@student.Major</td>
-                <td>@student.Status</td>
-                <td>@student.Teacher</td>
-                <td>@student.Note</td>
-            </tr>
-        }
-    </tbody>
-</table> *@

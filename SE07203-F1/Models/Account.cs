@@ -1,8 +1,15 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SE07203_F1.Models
 {
+    public class MyAccount
+    {
+        public int Id { get; set; }
+        // Add additional properties as needed
+    }
+
     public class Account
     {
         [Key]
@@ -24,11 +31,13 @@ namespace SE07203_F1.Models
         [Required]
         public string Status { get; set; } = "Active";
 
-        public ICollection<MyTask> MyTasks { get; set; }
+        public ICollection<MyTask> MyTasks { get; set; } = new List<MyTask>();
         // nếu muốn dùng nhiều kiểu danh sách hơn thì dùng kiểu interface 
-        public Student Student { get; set; }
+
         public virtual Student? StudentProfile { get; set; }
         public virtual Teacher? TeacherProfile { get; set; }
+
+
     }
 }
 // trong file này là khai báo biến 

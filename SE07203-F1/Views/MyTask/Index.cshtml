@@ -24,10 +24,10 @@
                                 ID
                             </th>
                             <th>
-                                Name
+                                Title
                             </th>
                             <th>
-                                Description
+                                Details
                             </th>
                              <th>
                                  User
@@ -41,34 +41,32 @@
                         </tr>
                         @if(Model != null && Model.Count > 0)
                         {
-                            foreach (MyTask t in Model)
+                            foreach (var t in Model)
                             {
                                 <tr>
                                     <th>
-                                        @t.Id
+                                        @(t?.GetType().GetProperty("Id")?.GetValue(t, null))
                                     </th>
                                     <th>
-                                        @t.Name
-                                        <input type="text" name="Name" value="@t.Name"></input>
+                                        @t.Title
+                                        <input type="text" name="Title" value="@t.Title" />
                                     </th>
                                     <th>
-                                        @t.Description
+                                        @t.Details
                                     </th>
                                     <th>
-                                        @t?.Account?.Id
+                                        @t?.AccountId
                                     </th>
                                     <th>
-                                        @t?.Category?.Name
-                                        <input type="text" name="Description" value="@t.Description" disabled class="form-control m-100" />
-
+                                        @t?.CategoryName
+                                        <input type="text" name="CategoryName" value="@(t?.CategoryName ?? string.Empty)" disabled class="form-control m-100" />
                                     </th>
                                     <th>
-                                        <form action = "Remove" asp-controller="MyTask" method="DELETE">
-
-                                        <input type ="number" name="id" value="@t.Id" class="d-none" />
-                                        <button class="btn btn-outline-danger w-100">
-                                            Remove
-                                        </button>
+                                        <form action="Remove" asp-controller="MyTask" method="post">
+                                            <input type="number" name="id" value="@(t?.GetType().GetProperty("Id")?.GetValue(t, null))" class="d-none" />
+                                            <button class="btn btn-outline-danger w-100">
+                                                Remove
+                                            </button>
                                         </form>
                                     </th>
                                 </tr>
@@ -134,7 +132,4 @@
         var data = 'id=' + encodeURIComponent(id);
             
     }
-
-
-
 </script>

@@ -94,16 +94,18 @@ namespace SE07203_F1.Migrations
                     b.Property<int?>("AccountId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("AssigneeId")
+                    b.Property<int>("CategoryId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("CategoryId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("CreatorId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("CategoryName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Details")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -111,15 +113,25 @@ namespace SE07203_F1.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("StudentId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("TeacherId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AccountId");
 
-                    b.HasIndex("AssigneeId");
-
                     b.HasIndex("CategoryId");
 
-                    b.HasIndex("CreatorId");
+                    b.HasIndex("StudentId");
+
+                    b.HasIndex("TeacherId");
 
                     b.ToTable("MyTasks");
                 });
@@ -130,17 +142,13 @@ namespace SE07203_F1.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("AccountId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("AccountId1")
+                    b.Property<int?>("AccountId")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Class")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
@@ -152,19 +160,15 @@ namespace SE07203_F1.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Major")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Note")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Status")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("StudentId")
@@ -172,15 +176,11 @@ namespace SE07203_F1.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Teacher")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AccountId")
-                        .IsUnique();
-
-                    b.HasIndex("AccountId1")
                         .IsUnique();
 
                     b.ToTable("Students");
@@ -213,31 +213,23 @@ namespace SE07203_F1.Migrations
 
             modelBuilder.Entity("SE07203_F1.Models.MyTask", b =>
                 {
-                    b.HasOne("SE07203_F1.Models.Account", "Account")
+                    b.HasOne("SE07203_F1.Models.Account", null)
                         .WithMany("MyTasks")
                         .HasForeignKey("AccountId");
 
-                    b.HasOne("SE07203_F1.Models.Student", "Assignee")
-                        .WithMany("AssignedTasks")
-                        .HasForeignKey("AssigneeId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("SE07203_F1.Models.Category", "Category")
+                    b.HasOne("SE07203_F1.Models.Category", null)
                         .WithMany("MyTasks")
-                        .HasForeignKey("CategoryId");
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("SE07203_F1.Models.Teacher", "Creator")
+                    b.HasOne("SE07203_F1.Models.Student", null)
+                        .WithMany("AssignedTasks")
+                        .HasForeignKey("StudentId");
+
+                    b.HasOne("SE07203_F1.Models.Teacher", null)
                         .WithMany("CreatedTasks")
-                        .HasForeignKey("CreatorId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("Account");
-
-                    b.Navigation("Assignee");
-
-                    b.Navigation("Category");
-
-                    b.Navigation("Creator");
+                        .HasForeignKey("TeacherId");
                 });
 
             modelBuilder.Entity("SE07203_F1.Models.Student", b =>
@@ -245,12 +237,7 @@ namespace SE07203_F1.Migrations
                     b.HasOne("SE07203_F1.Models.Account", "Account")
                         .WithOne("StudentProfile")
                         .HasForeignKey("SE07203_F1.Models.Student", "AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SE07203_F1.Models.Account", null)
-                        .WithOne("Student")
-                        .HasForeignKey("SE07203_F1.Models.Student", "AccountId1");
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Account");
                 });
@@ -269,9 +256,6 @@ namespace SE07203_F1.Migrations
             modelBuilder.Entity("SE07203_F1.Models.Account", b =>
                 {
                     b.Navigation("MyTasks");
-
-                    b.Navigation("Student")
-                        .IsRequired();
 
                     b.Navigation("StudentProfile");
 

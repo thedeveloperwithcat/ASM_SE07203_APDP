@@ -49,17 +49,16 @@ namespace SE07203_F1.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     StudentId = table.Column<string>(type: "TEXT", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
-                    Class = table.Column<string>(type: "TEXT", nullable: false),
-                    Major = table.Column<string>(type: "TEXT", nullable: false),
-                    Status = table.Column<string>(type: "TEXT", nullable: false),
-                    Teacher = table.Column<string>(type: "TEXT", nullable: false),
-                    Note = table.Column<string>(type: "TEXT", nullable: false),
-                    AccountId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", nullable: true),
+                    Class = table.Column<string>(type: "TEXT", nullable: true),
+                    Major = table.Column<string>(type: "TEXT", nullable: true),
+                    Status = table.Column<string>(type: "TEXT", nullable: true),
+                    Teacher = table.Column<string>(type: "TEXT", nullable: true),
+                    Note = table.Column<string>(type: "TEXT", nullable: true),
+                    AccountId = table.Column<int>(type: "INTEGER", nullable: true),
                     FullName = table.Column<string>(type: "TEXT", nullable: false),
                     Email = table.Column<string>(type: "TEXT", nullable: false),
-                    BirthDate = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    AccountId1 = table.Column<int>(type: "INTEGER", nullable: true)
+                    BirthDate = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -70,11 +69,6 @@ namespace SE07203_F1.Migrations
                         principalTable: "Accounts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Students_Accounts_AccountId1",
-                        column: x => x.AccountId1,
-                        principalTable: "Accounts",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -104,12 +98,15 @@ namespace SE07203_F1.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
+                    CategoryId = table.Column<int>(type: "INTEGER", nullable: false),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Title = table.Column<string>(type: "TEXT", nullable: false),
+                    Details = table.Column<string>(type: "TEXT", nullable: false),
+                    AccountId = table.Column<int>(type: "INTEGER", nullable: true),
+                    CategoryName = table.Column<string>(type: "TEXT", nullable: false),
                     Description = table.Column<string>(type: "TEXT", nullable: false),
-                    CategoryId = table.Column<int>(type: "INTEGER", nullable: true),
-                    CreatorId = table.Column<int>(type: "INTEGER", nullable: true),
-                    AssigneeId = table.Column<int>(type: "INTEGER", nullable: true),
-                    AccountId = table.Column<int>(type: "INTEGER", nullable: true)
+                    StudentId = table.Column<int>(type: "INTEGER", nullable: true),
+                    TeacherId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -123,19 +120,18 @@ namespace SE07203_F1.Migrations
                         name: "FK_MyTasks_Categories_CategoryId",
                         column: x => x.CategoryId,
                         principalTable: "Categories",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_MyTasks_Students_AssigneeId",
-                        column: x => x.AssigneeId,
-                        principalTable: "Students",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_MyTasks_Teachers_CreatorId",
-                        column: x => x.CreatorId,
+                        name: "FK_MyTasks_Students_StudentId",
+                        column: x => x.StudentId,
+                        principalTable: "Students",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_MyTasks_Teachers_TeacherId",
+                        column: x => x.TeacherId,
                         principalTable: "Teachers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.InsertData(
@@ -161,30 +157,24 @@ namespace SE07203_F1.Migrations
                 column: "AccountId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MyTasks_AssigneeId",
-                table: "MyTasks",
-                column: "AssigneeId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_MyTasks_CategoryId",
                 table: "MyTasks",
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MyTasks_CreatorId",
+                name: "IX_MyTasks_StudentId",
                 table: "MyTasks",
-                column: "CreatorId");
+                column: "StudentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MyTasks_TeacherId",
+                table: "MyTasks",
+                column: "TeacherId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Students_AccountId",
                 table: "Students",
                 column: "AccountId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Students_AccountId1",
-                table: "Students",
-                column: "AccountId1",
                 unique: true);
 
             migrationBuilder.CreateIndex(

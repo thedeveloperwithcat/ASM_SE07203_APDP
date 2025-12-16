@@ -22,8 +22,8 @@ namespace SE07203_F1.Controllers
                 int MyAccountId = Convert.ToInt32(HttpContext.Session.GetInt32("id"));
                 tasks = _context.MyTasks.Where(e  => e.AccountId == MyAccountId).ToList();
                 tasks = _context.MyTasks
-                    .Include(e => e.Category)
-                    .Include(e => e.Account)
+                    .Include(e => e.CategoryName)
+                    .Include(e => e.AccountId)
                     .ToList();
             }
             catch (Exception ex)

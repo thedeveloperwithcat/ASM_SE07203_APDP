@@ -1,60 +1,60 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.AspNetCore.Mvc;
+using SE07203_F1.Data;
+using SE07203_F1.Models;
+using System.Linq;
+
+public class MyTaskController : Controller
+{
+    private readonly ApplicationDbContext _context;
+
+    public MyTaskController(ApplicationDbContext context)
+    {
+        _context = context;
+    }
+
+    [HttpPost]
+    public IActionResult Create(Student model, int? accountId)
+    {
+        // Kiểm tra AccountId, tạo StudentId, Email/BirthDate mặc định
+        if (accountId.HasValue && _context.Students.Any(s => s.AccountId == accountId.Value))
+        {
+            ModelState.AddModelError("", "AccountId này đã được gán cho một Student khác!");
+            return View(model);
+        }
+
+        var student = new Student
+        {
+            Name = model.Name,
+            Class = model.Class,
+            Major = model.Major,
+            Status = model.Status,
+            Teacher = model.Teacher,
+            AccountId = accountId
+            // Email và BirthDate đã mặc định trong model
+        };
+
+        _context.Students.Add(student);
+        _context.SaveChanges();
+
+        student.StudentId = $"S{student.Id:0000}";
+        _context.SaveChanges();
+
+        return RedirectToAction("Index");
+    }
+}
 
 namespace SE07203_F1.Models
 {
     public class MyTask
     {
-        [Key]
         public int Id { get; set; }
 
-        public string Name { get; set; }
+        public int CategoryId { get; set; } public string Name { get; set; }
+        public string Title { get; set; }
+        public string Details { get; set; }
+        public int? AccountId { get; set; }
+        // Add this property to fix CS1061
+        public string CategoryName { get; set; }
         public string Description { get; set; }
-
-        public int? CategoryId { get; set; }
-
-        [ForeignKey("CategoryId")]
-        public virtual Category Category { get; set; } // Required for .Include(e => e.Category)
-                                                       // Người tạo Task (Teacher)
-        public int? CreatorId { get; set; } // Có thể null nếu cần, hoặc int nếu bắt buộc
-        public Teacher Creator { get; set; }
-
-        // Người được giao Task (Student)
-        public int? AssigneeId { get; set; }
-        public Student Assignee { get; set; }
-
-        public int? AccountId { get; set; } // Required for e.AccountId
-
-        [ForeignKey("AccountId")]
-        public virtual Account Account { get; set; } // Required for .Include(e => e.Account)
     }
 }
-
-
-
-//using System.ComponentModel.DataAnnotations;
-
-//namespace SE07203_F1.Models
-//{
-//    public class MyTask
-//    {
-//        [Key]
-//        public int Id { get; set; }
-//        [Required]
-//        [DataType(DataType.Text)]
-//        public string Name { get; set; }
-//        [Required]
-//        [DataType(DataType.Text)]
-//        public string Description { get; set; }
-//        [Required]
-//        public int? AccountId { get; set; }
-//        [Required]
-//        public int? CategoryId { get; set; }
-//        public string Status { get; set; } = "new"; // new / in_progress / completed / overdue
-//        public string Priority { get; set; } = "medium"; // low / medium / high
-//        public DateTime? DueDate { get; set; }
-//        public Account? Account { get; set; }
-//        // chấm hỏi vì không phải dữ liệu lúc nào cũng phải có 
-//        public Category? Category { get; set; }
-//    }
-//}
