@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using SE07203_F1.Data;
 using System.Security.Cryptography;
+using SE07203_F1.Services;
 using System.Text;
 
 namespace SE07203_F1.Controllers
@@ -9,10 +10,12 @@ namespace SE07203_F1.Controllers
     public class LoginController : Controller
     {
         readonly ApplicationDbContext _context;
+        private readonly LoginCounter _loginCounter;
 
-        public LoginController(ApplicationDbContext context)
+        public LoginController(ApplicationDbContext context, LoginCounter loginCounter)
         {
             _context = context;
+            _loginCounter = loginCounter;
         }
         public IActionResult Index()
         {
@@ -43,8 +46,9 @@ namespace SE07203_F1.Controllers
                 if (account == null)
                 {
                     ViewBag.Error = "Tên đăng nhập không tồn tại.";
-                    return View("Index"); // Trả về View Index kèm lỗi
+                    return View("Index");
                 }
+
                 string hashedPassword = HashPassword(password);
 
                 if (account.Password != hashedPassword)
@@ -54,15 +58,21 @@ namespace SE07203_F1.Controllers
                 }
                 else
                 {
-                    // Đăng nhập thành công
+                    // ---- ĐĂNG NHẬP THÀNH CÔNG ----
                     HttpContext.Session.SetString("username", username);
                     HttpContext.Session.SetString("fullname", account.Fullname);
                     HttpContext.Session.SetInt32("id", account.Id);
-
-                    // --- QUAN TRỌNG: LƯU ROLE VÀO SESSION ---
                     HttpContext.Session.SetString("role", account.Role);
 
-                    return RedirectToAction("Index", "Home"); // Chuyển hướng về trang chủ
+                    // -----------------------------
+                    // Tăng số lần đăng nhập (Singleton)
+                    // -----------------------------
+                    _loginCounter.Increase();
+
+                    // Log ra console (tùy chọn)
+                    Console.WriteLine("Số lần login: " + _loginCounter.GetCount());
+
+                    return RedirectToAction("Index", "Home");
                 }
             }
             catch (Exception ex)
