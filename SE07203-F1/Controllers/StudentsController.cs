@@ -33,64 +33,56 @@ namespace SE07203_F1.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Student student)
         {
-            // XỬ LÝ ACCOUNT (Tránh lỗi khóa ngoại) ---
-            var defaultAccount = await _context.Accounts.FirstOrDefaultAsync();
-            if (defaultAccount == null)
-            {
-                defaultAccount = new Account
-                {
-                    Fullname = "Admin System",
-                    Username = "admin",
-                    Password = "123",
-                    Email = "admin@test.com",
-                    Role = "Admin",
-                    Status = "Active"
-                };
-                _context.Accounts.Add(defaultAccount);
-                await _context.SaveChangesAsync();
-            }
-            student.AccountId = defaultAccount.Id;
+            // --- BẮT ĐẦU ĐOẠN SỬA ---
+            // LOGIC CŨ SAI: Lấy account admin gán cho sinh viên -> Gây lỗi Unique
+            // LOGIC MỚI: Tạo account mới riêng cho sinh viên này
 
+            // 1. Tự sinh StudentId nếu chưa có (giữ nguyên logic của bạn)
             if (string.IsNullOrEmpty(student.StudentId))
             {
                 student.StudentId = "SE" + DateTime.Now.Ticks.ToString().Substring(10);
             }
-            student.FullName ??= student.Name; 
-            student.Email ??= "student@test.com"; 
 
-            // BỎ QUA VALIDATION KHÔNG CẦN THIẾT ---
+            // 2. Tạo Account mới
+            var newStudentAccount = new Account
+            {
+                // Lấy mã SV làm username luôn để không bị trùng
+                Username = student.StudentId,
+                Fullname = student.Name ?? "New Student", // Lấy tên SV sang
+                Password = "123", // Pass mặc định
+                Email = (student.StudentId) + "@student.fpt.edu.vn", // Email giả lập theo mã SV
+                Role = "Student",
+                Status = "Active"
+            };
+
+            // 3. Lưu Account trước để lấy Id
+            _context.Accounts.Add(newStudentAccount);
+            await _context.SaveChangesAsync();
+
+            // 4. Gán Id của account vừa tạo vào sinh viên
+            student.AccountId = newStudentAccount.Id;
+            student.FullName = student.Name;
+
+            // Các đoạn logic dưới (ModelState.Remove, Validation...) giữ nguyên như cũ
             ModelState.Remove("Account");
             ModelState.Remove("AssignedTasks");
-            ModelState.Remove("StudentId"); 
+            ModelState.Remove("StudentId");
             ModelState.Remove("FullName");
             ModelState.Remove("Email");
 
-            // LƯU DATABASE ---
             if (ModelState.IsValid)
             {
                 try
                 {
                     _context.Add(student);
                     await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index)); 
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (Exception ex)
                 {
-                    // Nếu lỗi SQL, hiện ra màn hình để biết đường sửa
-                    ModelState.AddModelError("", "Lỗi Database: " + ex.InnerException?.Message ?? ex.Message);
+                    ModelState.AddModelError("", "Lỗi: " + ex.InnerException?.Message ?? ex.Message);
                 }
             }
-            else
-            {
-                // Nếu lỗi Validation, liệt kê lỗi ra (debug)
-                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
-                foreach (var err in errors)
-                {
-                    ModelState.AddModelError("", "Lỗi nhập liệu: " + err);
-                }
-            }
-
-            // Nếu thất bại, load lại danh sách cũ và hiện lỗi
             return View("Index", await _context.Students.ToListAsync());
         }
     }

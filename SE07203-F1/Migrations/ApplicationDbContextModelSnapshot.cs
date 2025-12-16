@@ -133,9 +133,6 @@ namespace SE07203_F1.Migrations
                     b.Property<int>("AccountId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("AccountId1")
-                        .HasColumnType("INTEGER");
-
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("TEXT");
 
@@ -178,9 +175,6 @@ namespace SE07203_F1.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AccountId")
-                        .IsUnique();
-
-                    b.HasIndex("AccountId1")
                         .IsUnique();
 
                     b.ToTable("Students");
@@ -248,10 +242,6 @@ namespace SE07203_F1.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SE07203_F1.Models.Account", null)
-                        .WithOne("Student")
-                        .HasForeignKey("SE07203_F1.Models.Student", "AccountId1");
-
                     b.Navigation("Account");
                 });
 
@@ -269,9 +259,6 @@ namespace SE07203_F1.Migrations
             modelBuilder.Entity("SE07203_F1.Models.Account", b =>
                 {
                     b.Navigation("MyTasks");
-
-                    b.Navigation("Student")
-                        .IsRequired();
 
                     b.Navigation("StudentProfile");
 

@@ -62,6 +62,9 @@
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="Home" asp-action="Index">Trang chủ</a>
+                            <a class="nav-link text-dark" asp-controller="StudentTask" asp-action="Index">
+                                <i class="bi bi-list-check"></i> My Tasks
+                            </a>
                         </li>
 
                         @if (username != null)

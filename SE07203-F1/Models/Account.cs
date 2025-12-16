@@ -26,7 +26,6 @@ namespace SE07203_F1.Models
 
         public ICollection<MyTask> MyTasks { get; set; }
         // nếu muốn dùng nhiều kiểu danh sách hơn thì dùng kiểu interface 
-        public Student Student { get; set; }
         public virtual Student? StudentProfile { get; set; }
         public virtual Teacher? TeacherProfile { get; set; }
     }

@@ -1,19 +1,22 @@
 @page
-@model SE07203_F1.Pages.Students.CreateModel
+@model SE07203_F1.Models.Student
 
 <h2>Add Student</h2>
-<form method="post">
+<form asp-action="Create" method="post">
     <div>
-        <label>Full Name</label>
-        <input asp-for="Student.FullName" />
+        <label asp-for="FullName"></label>
+        <input asp-for="FullName" />
     </div>
+
     <div>
-        <label>Email</label>
-        <input asp-for="Student.Email" />
+        <label asp-for="Email"></label>
+        <input asp-for="Email" />
     </div>
+
     <div>
-        <label>Birth Date</label>
-        <input asp-for="Student.BirthDate" type="date" />
+        <label asp-for="BirthDate"></label>
+        <input asp-for="BirthDate" type="date" />
     </div>
+
     <button type="submit">Add</button>
 </form>

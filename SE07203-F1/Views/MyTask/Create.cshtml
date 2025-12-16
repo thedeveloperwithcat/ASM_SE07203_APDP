@@ -15,6 +15,71 @@
         <div class="col-4">
         </div>
         <div class="col-4">
+            @* --- ĐOẠN SỬA LỖI CHECK NULL --- *@
+
+            @* 1. Kiểm tra lỗi: So sánh '== true' để tránh lỗi null *@
+            @if (ViewBag.IsError == true && !string.IsNullOrEmpty(ViewBag.Error))
+            {
+                <div class="alert alert-danger" role="alert">
+                    Error Appeared: @ViewBag.Error
+                </div>
+            }
+            @* 2. Kiểm tra thành công: Chỉ hiện khi IsError = false VÀ có biến Success *@
+            else if (ViewBag.IsError == false && ViewBag.Success == true)
+            {
+                <div class="alert alert-success" role="alert">
+                    Create new task successfully!!
+                </div>
+            }
+            @* -------------------------------- *@
+
+            <form asp-action="Create" asp-controller="MyTask" method="POST">
+                <div class="mb-3">
+                    <label asp-for="Name" class="form-label">Task Name</label>
+                    <input type="text" class="form-control" asp-for="Name" name="Name">
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Description" class="form-label">Task Description</label>
+                    <input type="text" class="form-control" asp-for="Description" name="Description">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Giao cho sinh viên (Tùy chọn)</label>
+                    <select asp-for="AssigneeId" class="form-select" asp-items="ViewBag.StudentList">
+                        <option value="">-- Chưa giao (Unassigned) --</option>
+                    </select>
+                </div>
+                <button class="btn btn-outline-success w-100">
+                    Submit
+                </button>
+            </form>
+        </div>
+        <div class="col-4">
+        </div>
+    </div>
+</div>
+
+
+@* 
+
+
+
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+
+@{
+}
+@model MyTask
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 text-center">
+            <h1>
+                Create a new task
+            </h1>
+        </div>
+        <div class="col-4">
+        </div>
+        <div class="col-4">
             @if (ViewBag.IsError && String.Compare(ViewBag.Error, String.Empty) != 0)
             {
                 <div class="alert alert-danger" role="alert">
@@ -45,3 +110,4 @@
         </div>
     </div>
 </div>
+ *@

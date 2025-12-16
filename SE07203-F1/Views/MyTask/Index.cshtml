@@ -63,12 +63,11 @@
 
                                     </th>
                                     <th>
-                                        <form action = "Remove" asp-controller="MyTask" method="DELETE">
-
-                                        <input type ="number" name="id" value="@t.Id" class="d-none" />
-                                        <button class="btn btn-outline-danger w-100">
-                                            Remove
-                                        </button>
+                                        <form asp-action="Remove" asp-controller="MyTask" method="POST">
+                                            <input type="hidden" name="id" value="@t.Id" />
+                                            <button class="btn btn-outline-danger w-100" onclick="return confirm('Bạn có chắc muốn xóa?');">
+                                                Remove
+                                            </button>
                                         </form>
                                     </th>
                                 </tr>
@@ -82,6 +81,53 @@
 </div>
 
 
+
+<script>
+    // 1. Enable Editing Mode
+    function enableEditing(id) {
+        // Toggle UI: Show inputs, hide text
+        document.getElementById("name-input-" + id).disabled = false;
+        document.getElementById("description-input-" + id).disabled = false;
+
+        // Toggle Buttons: Hide "Edit", Show "Save"
+        document.getElementById("btn-enabl-editing-" + id).classList.add("d-none");
+        document.getElementById("btn-subit-edit-" + id).classList.remove("d-none");
+    }
+
+    // 2. Submit Logic (The "Solid" Way)
+    function submitEdit(id) {
+        // A. Get values from inputs
+        var nameVal = document.getElementById("name-input-" + id).value; // Fixed .Value to .value
+        var descVal = document.getElementById("description-input-" + id).value;
+
+        // B. Prepare Form Data
+        var formData = new FormData();
+        formData.append("id", id);
+        formData.append("name", nameVal);
+        formData.append("description", descVal);
+
+        // C. Send to Server using Fetch API (Modern & Clean)
+        fetch('/MyTask/Edit', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (response.ok) {
+                alert('Update successfully!');
+                window.location.reload(); // Reload to reflect changes
+            } else {
+                alert('Update failed. Server returned error.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while sending data.');
+        });
+    }
+</script>
+
+
+@* 
 <script>
     // chưa hiểu lắm logic phần này // quan trọng phần nào cần nhận gửi những gì truyền cái gì quy tắc truyền là gì truyền như thế nào khi nào truyền // lại có những quy tắc nào để cho solid hơn 
     function enableEditing(id){
@@ -137,4 +183,4 @@
 
 
 
-</script>
+</script> *@

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SE07203_F1.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class FixAccountRelation : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -58,8 +58,7 @@ namespace SE07203_F1.Migrations
                     AccountId = table.Column<int>(type: "INTEGER", nullable: false),
                     FullName = table.Column<string>(type: "TEXT", nullable: false),
                     Email = table.Column<string>(type: "TEXT", nullable: false),
-                    BirthDate = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    AccountId1 = table.Column<int>(type: "INTEGER", nullable: true)
+                    BirthDate = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -70,11 +69,6 @@ namespace SE07203_F1.Migrations
                         principalTable: "Accounts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Students_Accounts_AccountId1",
-                        column: x => x.AccountId1,
-                        principalTable: "Accounts",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -179,12 +173,6 @@ namespace SE07203_F1.Migrations
                 name: "IX_Students_AccountId",
                 table: "Students",
                 column: "AccountId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Students_AccountId1",
-                table: "Students",
-                column: "AccountId1",
                 unique: true);
 
             migrationBuilder.CreateIndex(
