@@ -1,11 +1,11 @@
-@page
 @model SE07203_F1.Models.Student
 
 <h2>Add Student</h2>
 <form asp-action="Create" method="post">
+    @Html.AntiForgeryToken()
     <div>
-        <label asp-for="FullName"></label>
-        <input asp-for="FullName" />
+        <label asp-for="Name"></label>
+        <input asp-for="Name" />
     </div>
 
     <div>

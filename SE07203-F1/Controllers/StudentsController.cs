@@ -37,13 +37,13 @@ namespace SE07203_F1.Controllers
             // LOGIC CŨ SAI: Lấy account admin gán cho sinh viên -> Gây lỗi Unique
             // LOGIC MỚI: Tạo account mới riêng cho sinh viên này
 
-            // 1. Tự sinh StudentId nếu chưa có (giữ nguyên logic của bạn)
+            //1. Tự sinh StudentId nếu chưa có (giữ nguyên logic của bạn)
             if (string.IsNullOrEmpty(student.StudentId))
             {
                 student.StudentId = "SE" + DateTime.Now.Ticks.ToString().Substring(10);
             }
 
-            // 2. Tạo Account mới
+            //2. Tạo Account mới
             var newStudentAccount = new Account
             {
                 // Lấy mã SV làm username luôn để không bị trùng
@@ -55,13 +55,30 @@ namespace SE07203_F1.Controllers
                 Status = "Active"
             };
 
-            // 3. Lưu Account trước để lấy Id
+            //3. Lưu Account trước để lấy Id
             _context.Accounts.Add(newStudentAccount);
             await _context.SaveChangesAsync();
 
-            // 4. Gán Id của account vừa tạo vào sinh viên
+            //4. Gán Id của account vừa tạo vào sinh viên
             student.AccountId = newStudentAccount.Id;
             student.FullName = student.Name;
+
+            // Ensure DB non-nullable columns have values to avoid constraint errors
+            student.Name = student.Name ?? string.Empty;
+            student.Class = student.Class ?? string.Empty;
+            student.Major = student.Major ?? string.Empty;
+            student.Status = string.IsNullOrEmpty(student.Status) ? "Active" : student.Status;
+            student.Teacher = student.Teacher ?? string.Empty;
+            student.Note = student.Note ?? string.Empty;
+
+            // If Email not provided, use account email
+            student.Email = string.IsNullOrEmpty(student.Email) ? newStudentAccount.Email : student.Email;
+
+            // If BirthDate not provided, set a sensible default (avoid DateTime.MinValue in UI)
+            if (student.BirthDate == default)
+            {
+                student.BirthDate = DateTime.UtcNow.Date;
+            }
 
             // Các đoạn logic dưới (ModelState.Remove, Validation...) giữ nguyên như cũ
             ModelState.Remove("Account");
