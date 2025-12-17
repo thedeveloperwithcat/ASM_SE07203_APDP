@@ -1,0 +1,33 @@
+﻿@model IEnumerable<SE07203_F1.Models.Student>
+@{
+    ViewData["Title"] = "Danh sách Sinh viên";
+}
+
+<h2>@ViewData["Title"]</h2>
+<a asp-action="StudentsCreate" class="btn btn-primary mb-3">Thêm Sinh viên</a>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Fullname</th>
+            <th>Email</th>
+            <th>Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var s in Model)
+        {
+            <tr>
+                <td>@s.Id</td>
+                <td>@s.Account.Fullname</td>
+                <td>@s.Account.Email</td>
+                <td>
+                    <a asp-action="StudentsDetails" asp-route-id="@s.Id" class="btn btn-info btn-sm">Xem</a>
+                    <a asp-action="StudentsEdit" asp-route-id="@s.Id" class="btn btn-warning btn-sm">Sửa</a>
+                    <a asp-action="StudentsDelete" asp-route-id="@s.Id" class="btn btn-danger btn-sm">Xóa</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

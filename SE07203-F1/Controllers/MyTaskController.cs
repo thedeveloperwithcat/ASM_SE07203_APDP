@@ -1,22 +1,25 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SE07203_F1.Data;
 using SE07203_F1.Models;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 
 namespace SE07203_F1.Controllers
 {
     public class MyTaskController : Controller
     {
-        readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;
 
         public MyTaskController(ApplicationDbContext context)
         {
             _context = context;
         }
+
+        // ===============================
+        // Index - danh sách task của Teacher
+        // ===============================
         public async Task<IActionResult> Index()
         {
-            // Kiểm tra đăng nhập và Role
             var accountId = HttpContext.Session.GetInt32("id");
             var role = HttpContext.Session.GetString("role");
 
@@ -25,121 +28,143 @@ namespace SE07203_F1.Controllers
                 return RedirectToAction("Index", "Login");
             }
 
-            // Tìm Teacher dựa trên AccountId
-            var teacher = await _context.Teachers.FirstOrDefaultAsync(t => t.AccountId == accountId);
+            var teacher = await _context.Teachers
+                .FirstOrDefaultAsync(t => t.AccountId == accountId);
+
             if (teacher == null)
             {
-                // Nếu là Teacher nhưng chưa có dữ liệu trong bảng Teachers
-                return View(new List<MyTask>());
+                // Nếu chưa có teacher tương ứng → redirect login hoặc thông báo
+                ViewBag.Error = "Teacher không tồn tại trong hệ thống.";
+                return RedirectToAction("Index", "Login");
             }
 
-            // Lấy danh sách Task mà CreatorId == Teacher.Id
             var tasks = await _context.MyTasks
+                .Include(t => t.Assignee)
                 .Include(t => t.Category)
-                .Include(t => t.Assignee) // Include để hiện tên sinh viên
                 .Where(t => t.CreatorId == teacher.Id)
                 .ToListAsync();
 
             return View(tasks);
         }
 
-
-
-        [HttpPost]
-        public async Task<IActionResult> Create(MyTask _myTask) // Dùng tên biến _myTask như bạn yêu cầu
+        // ===============================
+        // Details
+        // ===============================
+        public async Task<IActionResult> Details(int? id)
         {
-            // 1. Lấy Account ID từ session
-            int? MyAccountId = HttpContext.Session.GetInt32("id");
+            if (id == null) return NotFound();
 
-            // 2. Tìm Teacher tương ứng để lấy CreatorId (QUAN TRỌNG)
-            // Nếu không có bước này, logic lọc ở trang Index sẽ không thấy task
-            var teacher = await _context.Teachers.FirstOrDefaultAsync(t => t.AccountId == MyAccountId);
+            var task = await _context.MyTasks
+                .Include(t => t.Assignee)
+                .Include(t => t.Category)
+                .Include(t => t.Creator)
+                    .ThenInclude(c => c.Account)
+                .FirstOrDefaultAsync(m => m.Id == id);
 
-            if (teacher != null)
-            {
-                _myTask.AccountId = MyAccountId;
-                _myTask.CreatorId = teacher.Id; // Gán ID giáo viên vào người tạo
-                _myTask.CategoryId = 1;         // Mặc định Category
-                _myTask.AssigneeId = null;      // Mới tạo chưa giao cho ai
+            if (task == null) return NotFound();
 
-                _context.MyTasks.Add(_myTask);
-                await _context.SaveChangesAsync();
-                return RedirectToAction("Index");
-            }
-
-            // Nếu lỗi hoặc không tìm thấy giáo viên
-            ViewBag.StudentList = new SelectList(_context.Students, "Id", "Name");
-            return View(_myTask);
+            return View(task);
         }
 
-        public async Task<IActionResult> Assign(int? id)
+        // ===============================
+        // Create
+        // ===============================
+        public IActionResult Create()
+        {
+            ViewBag.Students = _context.Students.ToList();
+            ViewBag.Categories = _context.Categories.ToList();
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(MyTask task)
+        {
+            var accountId = HttpContext.Session.GetInt32("id");
+            var teacher = await _context.Teachers.FirstOrDefaultAsync(t => t.AccountId == accountId);
+
+            if (teacher == null) return RedirectToAction("Index", "Login");
+
+            task.CreatorId = teacher.Id;
+
+            if (ModelState.IsValid)
+            {
+                _context.Add(task);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+
+            ViewBag.Students = _context.Students.ToList();
+            ViewBag.Categories = _context.Categories.ToList();
+            return View(task);
+        }
+
+        // ===============================
+        // Edit
+        // ===============================
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return NotFound();
 
             var task = await _context.MyTasks.FindAsync(id);
             if (task == null) return NotFound();
 
-            // ViewBag cho Dropdown list sinh viên
-            ViewBag.StudentId = new SelectList(_context.Students, "Id", "Name");
+            ViewBag.Students = _context.Students.ToList();
+            ViewBag.Categories = _context.Categories.ToList();
             return View(task);
         }
+
         [HttpPost]
-        public async Task<IActionResult> Assign(int id, int AssigneeId)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, MyTask task)
         {
-            var task = await _context.MyTasks.FindAsync(id);
-            if (task != null)
+            if (id != task.Id) return NotFound();
+
+            if (ModelState.IsValid)
             {
-                task.AssigneeId = AssigneeId;
-                _context.Update(task);
-                await _context.SaveChangesAsync();
+                try
+                {
+                    _context.Update(task);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!_context.MyTasks.Any(e => e.Id == task.Id)) return NotFound();
+                    else throw;
+                }
+                return RedirectToAction(nameof(Index));
             }
-            return RedirectToAction(nameof(Index));
+
+            ViewBag.Students = _context.Students.ToList();
+            ViewBag.Categories = _context.Categories.ToList();
+            return View(task);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Create()
+        // ===============================
+        // Delete
+        // ===============================
+        public async Task<IActionResult> Delete(int? id)
         {
-            ViewBag.StudentList = new SelectList(_context.Students, "Id", "Name");
-            ViewBag.IsError = false;
-            ViewBag.Success = false;
-            ViewBag.Error = string.Empty;
-            return View();
-        }
-        [HttpPost]
-        public async Task<IActionResult> Remove(int id)
-        {
-            ViewBag.IsError = false;
-            ViewBag.Success = false;
-            ViewBag.Error = string.Empty;
-            var task = await _context.MyTasks.FirstOrDefaultAsync(t => t.Id == id);
-            //MyTask myTask = new MyTask();
-            //myTask.Id = id;
-            if (task != null)
-            {
-                _context.MyTasks.Remove(task);  // 202511191537 
-                // sau khi xóa thì lưu nó lại 
-                await _context.SaveChangesAsync();
-                // _context.SaveChanges();
-            }
-            return RedirectToAction("Index");
+            if (id == null) return NotFound();
 
-        }
-        [HttpPost]
-        public async Task<IActionResult> Edit(int id, string name, string description)
-        {
-            var task = await _context.MyTasks.FindAsync(id);
+            var task = await _context.MyTasks
+                .Include(t => t.Assignee)
+                .Include(t => t.Category)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
             if (task == null) return NotFound();
 
-            // Update fields
-            task.Name = name;
-            task.Description = description;
-
-            _context.Update(task);
-            await _context.SaveChangesAsync();
-
-            // Return status code 200 (OK)
-            return Ok(new { success = true });
+            return View(task);
         }
 
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var task = await _context.MyTasks.FindAsync(id);
+            _context.MyTasks.Remove(task);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

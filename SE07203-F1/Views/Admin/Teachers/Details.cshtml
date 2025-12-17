@@ -1,0 +1,12 @@
+﻿@model SE07203_F1.Models.Teacher
+@{
+    ViewData["Title"] = "Chi tiết Giáo viên";
+}
+<h2>@ViewData["Title"]</h2>
+
+<div class="mb-3"><strong>Fullname:</strong> @Model.Account.Fullname</div>
+<div class="mb-3"><strong>Email:</strong> @Model.Account.Email</div>
+<div class="mb-3"><strong>Teacher Code:</strong> @Model.TeacherCode</div>
+<div class="mb-3"><strong>Department:</strong> @Model.Department</div>
+
+<a asp-action="TeachersIndex" class="btn btn-primary">Quay lại</a>

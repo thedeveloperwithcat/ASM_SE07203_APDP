@@ -1,0 +1,32 @@
+﻿@model SE07203_F1.Models.MyTask
+@{
+    ViewData["Title"] = "Sửa Task";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="TasksEdit" method="post">
+    <input type="hidden" asp-for="Id" />
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label">Tiêu đề</label>
+        <input asp-for="Name" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label">Mô tả</label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+    </div>
+    <div class="mb-3">
+        <label asp-for="CreatorId" class="form-label">Người tạo (Teacher)</label>
+        <select asp-for="CreatorId" class="form-select" asp-items="@(new SelectList(ViewBag.Teachers, "Id", "Account.Fullname"))"></select>
+    </div>
+    <div class="mb-3">
+        <label asp-for="AssigneeId" class="form-label">Người được giao (Student)</label>
+        <select asp-for="AssigneeId" class="form-select" asp-items="@(new SelectList(ViewBag.Students, "Id", "Account.Fullname"))"></select>
+    </div>
+    <div class="mb-3">
+        <label asp-for="CategoryId" class="form-label">Category</label>
+        <select asp-for="CategoryId" class="form-select" asp-items="@(new SelectList(ViewBag.Categories, "Id", "Name"))"></select>
+    </div>
+    <button type="submit" class="btn btn-success">Lưu</button>
+    <a asp-action="TasksIndex" class="btn btn-secondary">Hủy</a>
+</form>

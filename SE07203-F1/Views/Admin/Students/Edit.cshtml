@@ -1,0 +1,20 @@
+﻿@model SE07203_F1.Models.Student
+@{
+    ViewData["Title"] = "Sửa Sinh viên";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="StudentsEdit" method="post">
+    <input type="hidden" asp-for="Id" />
+    <div class="mb-3">
+        <label asp-for="Account.Fullname" class="form-label">Họ và tên</label>
+        <input asp-for="Account.Fullname" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Account.Email" class="form-label">Email</label>
+        <input asp-for="Account.Email" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-success">Lưu</button>
+    <a asp-action="StudentsIndex" class="btn btn-secondary">Hủy</a>
+</form>

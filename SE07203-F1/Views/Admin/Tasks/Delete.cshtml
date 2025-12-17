@@ -1,0 +1,13 @@
+﻿@model SE07203_F1.Models.MyTask
+@{
+    ViewData["Title"] = "Xóa Task";
+}
+<h2>@ViewData["Title"]</h2>
+
+<p>Bạn có chắc muốn xóa task <strong>@Model.Name</strong> không?</p>
+
+<form asp-action="TasksDeleteConfirmed" method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Xóa</button>
+    <a asp-action="TasksIndex" class="btn btn-secondary">Hủy</a>
+</form>

@@ -1,8 +1,9 @@
 ﻿@model MyTask
 
-<h2>Tạo Task mới</h2>
+<h2>Sửa Task</h2>
 
-<form asp-action="Create" method="post">
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Id" />
     <div class="form-group">
         <label>Tên Task</label>
         <input asp-for="Name" class="form-control" />
@@ -14,17 +15,17 @@
     <div class="form-group">
         <label>Danh mục</label>
         <select asp-for="CategoryId" class="form-control"
-                asp-items="@(new SelectList(ViewBag.Categories, "Id", "Name"))">
+                asp-items="@(new SelectList(ViewBag.Categories, "Id", "Name", Model.CategoryId))">
             <option value="">--Chọn danh mục--</option>
         </select>
     </div>
     <div class="form-group">
         <label>Giao cho Student</label>
         <select asp-for="AssigneeId" class="form-control"
-                asp-items="@(new SelectList(ViewBag.Students, "Id", "Name"))">
+                asp-items="@(new SelectList(ViewBag.Students, "Id", "Name", Model.AssigneeId))">
             <option value="">--Chọn Student--</option>
         </select>
     </div>
-    <button type="submit" class="btn btn-success">Tạo Task</button>
+    <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
     <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
 </form>

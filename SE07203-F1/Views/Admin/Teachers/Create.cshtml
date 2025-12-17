@@ -1,0 +1,27 @@
+﻿@model SE07203_F1.Models.Teacher
+@{
+    ViewData["Title"] = "Thêm Giáo viên";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="TeachersCreate" method="post">
+    <div class="mb-3">
+        <label asp-for="TeacherCode" class="form-label">Mã GV</label>
+        <input asp-for="TeacherCode" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Department" class="form-label">Bộ môn</label>
+        <input asp-for="Department" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Account.Fullname" class="form-label">Họ và tên</label>
+        <input asp-for="Account.Fullname" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Account.Email" class="form-label">Email</label>
+        <input asp-for="Account.Email" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-success">Lưu</button>
+    <a asp-action="TeachersIndex" class="btn btn-secondary">Hủy</a>
+</form>

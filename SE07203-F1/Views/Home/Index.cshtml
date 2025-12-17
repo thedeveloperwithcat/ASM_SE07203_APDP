@@ -1,9 +1,10 @@
 ﻿@{
     ViewData["Title"] = "Trang chủ";
+
     // Lấy thông tin từ Session
-    var username = Context.Session.GetString("username");
-    var fullname = Context.Session.GetString("fullname");
-    var role = Context.Session.GetString("role");
+    var username = Context.Session.GetString("username") ?? "";
+    var fullname = Context.Session.GetString("fullname") ?? "Người dùng";
+    var role = Context.Session.GetString("role") ?? "";
 }
 
 <div class="text-center py-5">
@@ -11,7 +12,7 @@
     <p class="lead text-secondary mb-5">Nền tảng kết nối Giáo viên và Sinh viên hiệu quả.</p>
 
     @* --- TRƯỜNG HỢP 1: CHƯA ĐĂNG NHẬP --- *@
-    @if (username == null)
+    @if (string.IsNullOrEmpty(username))
     {
         <div class="d-flex justify-content-center gap-3">
             <a asp-controller="Login" asp-action="Index" class="btn btn-primary btn-lg px-4 shadow-sm">
@@ -38,6 +39,13 @@
 
                 <div class="d-flex justify-content-center gap-2 mt-3 flex-wrap">
 
+                    @if(role == "Admin" || role == "Teacher")
+                    {
+                        <a asp-controller="Admin" asp-action="StudentsIndex">Quản lý Sinh viên</a>
+                        <a asp-controller="Admin" asp-action="TeachersIndex">Quản lý Giáo viên</a>
+                        <a asp-controller="Admin" asp-action="TasksIndex">Quản lý Task</a>
+                    }
+
                     @* --- MENU CHO GIÁO VIÊN / ADMIN --- *@
                     @if (role == "Teacher" || role == "Admin")
                     {
@@ -56,6 +64,10 @@
                         <a asp-controller="StudentTask" asp-action="Index" class="btn btn-primary btn-lg">
                             <i class="bi bi-journal-check"></i> Bài tập của tôi
                         </a>
+                    }
+                    else
+                    {
+                        <span class="text-warning">Vai trò chưa xác định hoặc không hợp lệ.</span>
                     }
                 </div>
             </div>

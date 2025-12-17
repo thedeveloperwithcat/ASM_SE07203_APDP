@@ -1,0 +1,13 @@
+﻿@model SE07203_F1.Models.MyTask
+@{
+    ViewData["Title"] = "Chi tiết Task";
+}
+<h2>@ViewData["Title"]</h2>
+
+<div class="mb-3"><strong>Tiêu đề:</strong> @Model.Name</div>
+<div class="mb-3"><strong>Mô tả:</strong> @Model.Description</div>
+<div class="mb-3"><strong>Người tạo:</strong> @Model.Creator?.Account?.Fullname</div>
+<div class="mb-3"><strong>Người được giao:</strong> @Model.Assignee?.Account?.Fullname</div>
+<div class="mb-3"><strong>Category:</strong> @Model.Category?.Name</div>
+
+<a asp-action="TasksIndex" class="btn btn-primary">Quay lại</a>

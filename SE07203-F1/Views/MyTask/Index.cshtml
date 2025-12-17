@@ -1,6 +1,44 @@
-﻿@*
+﻿@model List<MyTask>
+
+<h2>Danh sách Task của tôi</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-success">Tạo mới Task</a>
+</p>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Tên</th>
+            <th>Danh mục</th>
+            <th>Giao cho</th>
+            <th>Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Name</td>
+                <td>@item.Category?.Name ?? "Không có"</td>
+                <td>@item.Assignee?.Name ?? "Chưa giao"</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">Chi tiết</a>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary btn-sm">Sửa</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Xóa</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
+@* 
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+
 @{
 }
 @model List<MyTask>
@@ -124,7 +162,7 @@
             alert('An error occurred while sending data.');
         });
     }
-</script>
+</script> *@
 
 
 @* 

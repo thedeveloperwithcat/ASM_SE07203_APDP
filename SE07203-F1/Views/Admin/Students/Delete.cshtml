@@ -1,0 +1,13 @@
+﻿@model SE07203_F1.Models.Student
+@{
+    ViewData["Title"] = "Xóa Sinh viên";
+}
+<h2>@ViewData["Title"]</h2>
+
+<p>Bạn có chắc muốn xóa sinh viên <strong>@Model.Account.Fullname</strong> không?</p>
+
+<form asp-action="StudentsDeleteConfirmed" method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Xóa</button>
+    <a asp-action="StudentsIndex" class="btn btn-secondary">Hủy</a>
+</form>
