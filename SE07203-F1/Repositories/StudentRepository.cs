@@ -45,40 +45,48 @@ namespace SE07203_F1.Repositories
                 student.FullName = student.Name;
             }
 
-            // --- SỬA LỖI TẠI ĐÂY ---
-            // Gán giá trị tạm để vượt qua kiểm tra NOT NULL của Database
-            // (Vì lúc này chưa có ID để sinh mã SV000X)
             student.StudentId = "TEMP_ID";
 
-            // 2. Thêm vào DB (Lần này sẽ thành công vì StudentId đã có chữ "TEMP_ID")
+
             _context.Students.Add(student);
             _context.SaveChanges();
 
-            // 3. Lúc này đã có student.Id (ví dụ = 5). Ta cập nhật lại mã thật.
-            student.StudentId = $"SV{student.Id:D4}"; // Kết quả: SV0005
+           
+            student.StudentId = $"SV{student.Id:D4}"; 
 
-            // Gán trạng thái mặc định nếu chưa có
             if (string.IsNullOrEmpty(student.Status)) student.Status = "Active";
 
-            // 4. Lưu lại lần cuối
+
             _context.Students.Update(student);
             _context.SaveChanges();
         }
 
         public void UpdateStudent(Student student)
         {
-            // Bước 1: Lấy dữ liệu cũ đang có trong Database (dùng AsNoTracking để không bị khóa record)
+
             var existingStudent = _context.Students.AsNoTracking().FirstOrDefault(s => s.Id == student.Id);
 
             if (existingStudent != null)
             {
-                // Bước 2: Giữ lại AccountId cũ (vì form Sửa không gửi AccountId lên)
-                student.AccountId = existingStudent.AccountId;
 
-                // Bước 3: Đảm bảo các trường không nhập cũng không bị lỗi
-                if (string.IsNullOrEmpty(student.Name)) student.Name = student.FullName;
+                if (!string.IsNullOrEmpty(student.FullName) && string.IsNullOrEmpty(student.Name))
+                {
+                    student.Name = student.FullName;
+                }
+                // Ngược lại, nếu người dùng nhập Name mà quên FullName
+                else if (!string.IsNullOrEmpty(student.Name) && string.IsNullOrEmpty(student.FullName))
+                {
+                    student.FullName = student.Name;
+                }
 
-                // Bước 4: Cập nhật
+                // 3. Giữ lại các thông tin quan trọng từ bản ghi cũ nếu form Edit không gửi lên
+                student.AccountId = existingStudent.AccountId; // Giữ liên kết tài khoản
+                if (string.IsNullOrEmpty(student.StudentId))
+                {
+                    student.StudentId = existingStudent.StudentId; // Giữ mã SV cũ nếu bị mất
+                }
+
+                // 4. Cập nhật vào Database
                 _context.Students.Update(student);
                 _context.SaveChanges();
             }
